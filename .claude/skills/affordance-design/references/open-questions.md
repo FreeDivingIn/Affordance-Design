@@ -1,5 +1,16 @@
 # Open Questions
 
+## Contents
+
+- OPEN-01 — Ownership transfer events
+- OPEN-02 — Updating visible provisional content
+- OPEN-03 — Material-change threshold for recommendation regeneration
+- OPEN-04 — Arbitration among multiple eligible recommendations
+- OPEN-05 — Current context as default vs capability filter
+- OPEN-06 — Deliberate signal vs incidental state
+- OPEN-07 — Natural break detection
+- Iteration method
+
 These questions are intentionally unresolved. Do not treat them as settled rules in runtime decisions.
 
 They are preserved so future iterations can continue the same evidence-driven interview process without turning hypotheses into doctrine.
