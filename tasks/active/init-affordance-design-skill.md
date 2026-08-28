@@ -24,11 +24,14 @@ Initialize the repository as a discoverable Agent Skill and convert the v0.3/v0.
 - Milestone 1: reviewed current Agent Skills specification, Anthropic authoring guidance, skill-creator workflow, repository discovery, and evaluation guidance.
 - Milestone 2: created `.claude/skills/affordance-design/SKILL.md`.
 - Milestone 3: created focused references for root principles, interaction compiler, ownership/automation, anti-average lint, research provenance, and open questions.
-- Milestone 4: added initial behavior evals and trigger cases.
+- Milestone 4: added five initial behavior evals and explicit positive/negative/ambiguous trigger cases.
+- Milestone 5: verified the repository path, frontmatter naming, direct reference topology, file-size/line budgets, README, and branch diff. Added a contents section to every reference over 100 lines.
 
 ## Current State
 
-Initialization files exist on branch `skill/init-affordance-design`. README update and final structural verification remain.
+Skill initialization is complete on branch `skill/init-affordance-design`.
+
+The branch contains a 267-line `SKILL.md`, six direct reference files, behavior evals, trigger cases, and an updated README. No files have been merged into `main` and no pull request has been created.
 
 ## Open Issues
 
@@ -44,6 +47,7 @@ Initialization files exist on branch `skill/init-affordance-design`. README upda
 - Keep all references one level deep and directly linked from `SKILL.md`.
 - Do not add scripts during init because the current differentiating logic is judgment-heavy.
 - Include evals at initialization rather than postponing validation design.
+- Keep research provenance outside the runtime core so design reasoning remains maintainable without consuming every invocation's context.
 
 ## Constraints
 
@@ -51,35 +55,44 @@ Initialization files exist on branch `skill/init-affordance-design`. README upda
 - Do not promote unresolved questions into runtime rules.
 - Do not make responsive/component recipes the root organizing principle.
 - Do not broaden the trigger description into purely visual styling tasks.
+- Keep future references directly reachable from `SKILL.md`; avoid reference-to-reference dependency chains as the only discovery path.
 
 ## Hypotheses
 
 - The current description may still need trigger tuning after clean-session testing.
 - Several lint rules may later prove deterministic enough to move into scripts.
+- The current core workflow may still be longer than necessary for the strongest models; benchmark token/quality deltas should determine future compression.
 
 ## Deferred
 
 - Cross-model behavior benchmark.
 - With-skill vs no-skill baseline comparison.
 - Quantitative assertions after first eval runs expose discriminating checks.
+- Description optimization after behavior stabilizes.
 - Packaging/release workflow.
 
 ## Next
 
-1. Update README with installation/discovery and repository structure.
-2. Verify every reference link and frontmatter requirement.
-3. Review line/word budgets and remove accidental duplication.
-4. Form checkpoint and prepare next milestone: benchmark iteration 1.
+Benchmark iteration 1:
+
+1. Run clean-session trigger cases.
+2. Run each behavior eval with and without the skill.
+3. Add objective assertions only where the behavior is mechanically verifiable.
+4. Use qualitative review for structural design quality.
+5. Analyze failures for under-triggering, over-triggering, skipped rules, excessive process, and token cost.
+6. Revise the skill only from observed failures.
 
 ## Verification
 
-Initialization is complete when:
+Confirmed:
 
-- `SKILL.md` is discoverable at the required repository path;
-- frontmatter name matches directory and description covers what/when;
-- `SKILL.md` remains below the recommended size ceiling;
-- all detailed references are direct, one-level links;
-- open hypotheses are isolated from hard rules;
-- behavior and trigger eval inputs exist;
-- repository README points to the skill entrypoint;
-- final branch readback matches intended structure.
+- `SKILL.md` is at `.claude/skills/affordance-design/SKILL.md`.
+- Frontmatter `name: affordance-design` matches its directory and satisfies naming constraints.
+- Description states both what the skill does and when to use it, and excludes purely visual styling tasks.
+- `SKILL.md` is 267 lines, below the 500-line authoring ceiling.
+- Detailed knowledge is split across six focused references, all directly linked from `SKILL.md`.
+- Every reference over 100 lines has a contents section.
+- Behavior and trigger eval inputs exist.
+- README points to the actual discovery path.
+- Unresolved hypotheses are isolated from runtime hard rules.
+- Branch is ahead of `main` only; initialization has not modified `main`.
