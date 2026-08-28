@@ -30,6 +30,12 @@
       "prompt": "A planning system generated a quarterly forecast, the manager reviewed and accepted it, and later the model computes a substantially different forecast. The proposal silently replaces the accepted values and provides Undo. Review the behavior.",
       "expected_output": "The response treats the accepted forecast as user-owned regardless of system origin, classifies the change as replacement/transform of owned value, rejects silent overwrite, and distinguishes preview/comparison from Undo-based recovery.",
       "files": []
+    },
+    {
+      "id": 6,
+      "prompt": "Build a Web and Mobile prototype for assigning field technicians to urgent jobs. We use Tamagui, so start from its Tabs, Popover, Sheet, Dialog, Select, and ContextMenu components and compose the best flow from what is available.",
+      "expected_output": "The response explicitly refuses component-first composition as the design method. It first derives the operator task, known context, unresolved decisions, candidate interaction models, scope/state/recovery behavior, and selects a structural model without Tamagui component vocabulary. Only after the interaction is chosen does it map the behavior to Tamagui and produce or describe a deliberately block-like runnable prototype. Web/Mobile presentation may differ without changing the semantic interaction contract.",
+      "files": []
     }
   ]
 }
