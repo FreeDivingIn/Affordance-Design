@@ -1,11 +1,11 @@
 ---
 name: affordance-design
-description: Analyzes and designs interface structure, affordances, information architecture, task flows, action scope, interaction layers, and AI-assisted behavior. Use when deciding how UI capabilities should be grouped, where actions belong, whether a step/menu/modal is justified, how current context should constrain actions, how recommendations or automation should intervene, or when reviewing an interface that feels structurally confusing, indirect, generic, or template-driven. Do not use for purely visual styling, branding, typography, color, or decorative polish unless structural interaction decisions are involved.
+description: Analyzes and designs interface structure, affordances, information architecture, task flows, action scope, interaction layers, AI-assisted behavior, and runnable structural prototypes. Use when deciding how UI capabilities should be grouped, where actions belong, whether a step/menu/modal is justified, how current context should constrain actions, how recommendations or automation should intervene, or when reviewing/designing an interface that feels structurally confusing, indirect, generic, or template-driven. Do not use for purely visual styling, branding, typography, color, or decorative polish unless structural interaction decisions are involved.
 ---
 
 # Affordance Design
 
-Design from the user's current problem state and already-expressed intent. Do not begin by choosing familiar UI patterns.
+Design from the user's current problem state and already-expressed intent. Do not begin by choosing familiar UI patterns or by browsing available UI components.
 
 The skill exists to counter a common failure mode: a plausible interface can still be structurally generic, indirect, or based on the product team's internal feature taxonomy rather than the user's mental model.
 
@@ -202,9 +202,29 @@ recovery_window:
 
 Do not add confirmation dialogs mechanically. The purpose of an extra confirmation layer is to establish consequence understanding where impact or recovery cost warrants it.
 
-### 14. Run the anti-average review
+### 14. Diverge before component mapping
 
-Before finalizing any structural proposal, read `references/anti-average-lint.md` and revise until all ERROR-level failures are removed.
+When the architecture or interaction behavior is genuinely ambiguous, generate alternatives that differ in relationship model, task flow, scope, or state transition — not in visual styling and not in component choice.
+
+During divergence, reason without Tamagui component names. Do not browse or enumerate the component library to generate ideas.
+
+For each serious candidate state:
+
+```yaml
+assumption:
+interaction_model:
+advantage:
+failure_mode:
+evidence_needed:
+```
+
+Choose the interaction behavior before choosing its implementation primitive.
+
+Do not let the available component inventory reduce design exploration.
+
+### 15. Run the anti-average review before implementation
+
+Read `references/anti-average-lint.md` and revise until all ERROR-level failures are removed.
 
 In particular, reject:
 
@@ -218,22 +238,62 @@ In particular, reject:
 - recommendations interrupting unrelated or active context;
 - time-based repetition of the same recommendation;
 - “simplification” justified only by fewer visible elements;
-- the first familiar topology accepted without testing alternatives when the structure is genuinely ambiguous.
+- the first familiar topology accepted without testing alternatives when the structure is genuinely ambiguous;
+- choosing an interaction because a component library makes that interaction convenient.
+
+### 16. Map the selected interaction to Tamagui
+
+Only after the structural behavior is selected, read `references/tamagui-prototyping.md`.
+
+Tamagui is the single prototype runtime during the initial phase. Do not merge other UI/component systems into the prototype stack unless the project's engineering contract is explicitly revised from evidence.
+
+Map semantics to the smallest sufficient Tamagui primitives. If no stock component exactly represents the selected behavior, compose simpler Tamagui primitives rather than changing the interaction model to fit a named component.
+
+Cross-platform presentation may adapt after semantics are fixed. Web and Mobile do not need identical visual components; they must preserve the intended task, scope, state transition, consequence, and recovery behavior unless the usage context itself requires a different model.
+
+### 17. Build a runnable block prototype
+
+For a design task, the default final artifact is a runnable structural prototype when the environment permits artifact/code creation.
+
+The prototype should be visually neutral and expose the important behavior directly:
+
+- current context and selection;
+- relevant states and transitions;
+- required layers and branches;
+- action scope;
+- preview / accept / recovery behavior;
+- proactive intervention timing when relevant;
+- Web / Mobile presentation adaptation when relevant.
+
+Keep styling deliberately simple. Do not spend the structural-validation phase on brand expression, visual trends, decorative cards, elaborate motion, or production polish.
+
+The prototype is successful when using it can reveal structural mistakes.
+
+### 18. Operate and review the prototype
+
+Do not treat successful rendering as completion.
+
+Use the prototype through its important paths and verify:
+
+```text
+context is preserved where required
+resolved decisions are not re-asked
+state changes are attributable
+extra layers buy real value
+multiple access paths remain semantically compatible
+user-owned value is protected
+recommendations respect context and active engagement
+recovery behavior is visible
+Web / Mobile adaptations preserve interaction semantics
+```
+
+If operation exposes a structural failure, revise the interaction model and rebuild. Review has authority to overturn the just-created result.
 
 ## Handling ambiguous architecture
 
-When materially different relationship models remain plausible, generate alternatives that differ in structural logic, not visual styling.
+Do not let “standard”, “modern”, “familiar”, “minimal”, or “available in the component library” decide the winner unless that property solves an explicit user problem.
 
-For each candidate state:
-
-```yaml
-assumption:
-advantage:
-failure_mode:
-evidence_needed:
-```
-
-Do not let “standard”, “modern”, “familiar”, or “minimal” decide the winner unless that quality solves an explicit user problem.
+If materially different relationship models remain plausible after divergence, keep the uncertainty explicit rather than polishing one arbitrary choice.
 
 ## Output behavior
 
@@ -247,7 +307,12 @@ When reviewing an existing interface, report:
 4. the rule that makes the correction necessary;
 5. remaining uncertainty, if any.
 
-When designing a new structure, report the chosen model and decisive tradeoffs rather than presenting several mediocre options as equivalent.
+When designing a new structure:
+
+1. state the selected structural/interaction model and decisive tradeoffs;
+2. produce a runnable block prototype when implementation is available and useful;
+3. keep flow diagrams or textual structural models as supporting artifacts rather than substitutes for behavior that needs interaction testing;
+4. do not silently escalate into full visual UI design.
 
 ## References
 
@@ -257,11 +322,22 @@ Read only what the current task needs; all references are directly linked here t
 - Context, uncertainty, layers, grouping, affordances, scope, and interaction weight → `references/interaction-compiler.md`
 - User ownership, mutation, automation authority, recommendations, feedback, and recovery → `references/ownership-and-automation.md`
 - Hard anti-average failures and review checklist → `references/anti-average-lint.md`
+- Tamagui implementation after interaction design is fixed → `references/tamagui-prototyping.md`
 - Research provenance and how the rules were derived → `references/research-basis.md`
 - Unresolved questions that must not be treated as settled rules → `references/open-questions.md`
 
 ## Validation
 
-Use `evals/evals.json` as the initial behavior suite. Compare skill-enabled outputs against a no-skill baseline and evaluate both structural correctness and whether the skill avoids unnecessary process or explanation.
+Use `evals/evals.json` as the initial behavior suite. Compare skill-enabled outputs against a no-skill baseline and evaluate structural correctness, divergence quality, prototype behavior, and whether the skill avoids unnecessary process or explanation.
+
+A prototype eval must distinguish two separate failures:
+
+```text
+design failure:
+interaction model was weak or component-led
+
+implementation failure:
+selected interaction was sound but Tamagui mapping/code was wrong
+```
 
 Do not convert judgment-heavy rules into deterministic scripts until repeated eval failures show a stable mechanical predicate worth enforcing.
