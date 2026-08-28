@@ -18,7 +18,7 @@ Make Affordance Design produce runnable, block-like structural prototypes for We
 2. Establish the product output contract and engineering sequencing constraints.
 3. Update the Skill so divergence and structural review occur before Tamagui mapping.
 4. Add prototype-focused evals that catch component-first convergence.
-5. Build the first minimal runnable block prototype scaffold with Tamagui.
+5. Build the first minimal runnable block prototype scaffold with Tamagui from a pre-selected interaction model.
 6. Run a cross-platform interaction benchmark and review whether Tamagui implementation changes the selected interaction model.
 
 ## Completed
@@ -26,17 +26,21 @@ Make Affordance Design produce runnable, block-like structural prototypes for We
 - Milestone 1: reviewed current official Tamagui 2 documentation for core architecture, installation, UI, v5 configuration, media queries, `Adapt`, Popover, Select, Sheet, Menu, Tabs, Context Menu, headless subset, compiler behavior, and `generate-prompt`.
 - Milestone 2: added `product-spec.md` defining runnable block prototypes as the default design artifact and `engineering-contract.md` defining Tamagui as the single initial runtime plus interaction-first sequencing.
 - Milestone 3: added `references/tamagui-prototyping.md` and revised `SKILL.md` so Tamagui is read only after divergence, structural choice, and anti-average review.
+- Milestone 4: added an eval that explicitly asks the model to begin from Tamagui components; expected behavior is to reject component-first composition, complete interaction reasoning first, then map the selected behavior to Tamagui.
 
 ## Current State
 
-The reasoning/runtime boundary is now explicit in documentation and the Skill workflow. No Tamagui application scaffold has been created yet.
+The reasoning/runtime boundary is explicit in product spec, engineering contract, runtime reference, Skill workflow, and eval coverage.
+
+No Tamagui application scaffold has been created yet. This is intentional: a runtime scaffold must be exercised by a pre-selected interaction model rather than becoming a component showcase or a source of design ideas.
 
 ## Open Issues
 
-- The exact minimal prototype project shape has not been selected yet (for example Expo universal vs a different supported starter).
+- The exact minimal prototype project shape has not been selected yet (for example Expo universal vs another supported starter).
 - No runnable prototype has yet verified Web / Mobile behavior.
 - No evidence yet justifies a custom design system, component registry, additional component library, or abstraction layer.
 - The boundary between a design failure and a Tamagui mapping failure still needs benchmark examples.
+- The first representative interaction model for the runtime checkpoint still needs to be selected independently of Tamagui.
 
 ## Decisions
 
@@ -47,6 +51,7 @@ The reasoning/runtime boundary is now explicit in documentation and the Skill wo
 - The default artifact is a low-visual-fidelity, high-behavior-fidelity block prototype.
 - Web and Mobile may use different presentations after semantics are fixed; the task/scope/state/recovery contract should remain consistent unless context justifies a different model.
 - Prefer composition of simpler Tamagui primitives over changing a validated interaction model merely to fit a stock component.
+- Do not build a generic component showcase as the first prototype checkpoint.
 
 ## Constraints
 
@@ -55,6 +60,7 @@ The reasoning/runtime boundary is now explicit in documentation and the Skill wo
 - Do not add another UI library without evidence meeting the re-evaluation conditions in `engineering-contract.md`.
 - Keep current Tamagui API/version details in implementation/reference material, not product behavior documents.
 - A successful render is not a successful prototype; key paths must be operated and reviewed.
+- The first runnable prototype must start from an interaction specification that was produced without Tamagui component vocabulary.
 
 ## Hypotheses
 
@@ -73,11 +79,14 @@ The reasoning/runtime boundary is now explicit in documentation and the Skill wo
 
 ## Next
 
-1. Add a benchmark case where Tamagui components are explicitly mentioned in the prompt and verify the Skill still designs behavior first.
-2. Choose the smallest supported Tamagui universal starter for the first runtime checkpoint.
-3. Implement one representative interaction with materially different Web/Mobile presentation after semantics are locked.
-4. Operate both targets and run the anti-average review.
-5. Record whether any Tamagui limitation actually changes the design or only the implementation.
+Milestone 5:
+
+1. Select or derive one representative interaction model without consulting Tamagui components.
+2. Freeze its task, context, unresolved uncertainty, action scopes, state transitions, mutation/ownership behavior, and recovery contract.
+3. Only then choose the smallest supported Tamagui universal starter and load Tamagui implementation knowledge.
+4. Map the fixed interaction to Tamagui primitives.
+5. Implement Web and Mobile presentations with deliberately block-like visual fidelity.
+6. Operate both targets and run structural Review before accepting the checkpoint.
 
 ## Verification
 
