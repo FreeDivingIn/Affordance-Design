@@ -8,6 +8,7 @@
     "web": "expo start --web -c",
     "ios": "expo start --ios -c",
     "android": "expo start --android -c",
+    "test:model": "node --experimental-strip-types --test assignment-model.test.ts",
     "typecheck": "tsc --noEmit",
     "export:web": "expo export --platform web --output-dir dist-web",
     "export:ios": "expo export --platform ios --output-dir dist-ios"
