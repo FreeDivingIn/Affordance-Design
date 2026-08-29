@@ -1,0 +1,74 @@
+name: Affordance evals Pages
+
+on:
+  push:
+    branches:
+      - main
+      - skill/init-affordance-design
+    paths:
+      - 'evals/**'
+      - 'prototypes/assignment/runtime/**'
+      - '.github/workflows/evals-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: prototypes/assignment/runtime/package.json
+
+      - name: Install prototype dependencies
+        working-directory: prototypes/assignment/runtime
+        run: npm install --no-audit --no-fund
+
+      - name: Build case 001 prototype for Pages subpath
+        working-directory: prototypes/assignment/runtime
+        env:
+          EXPO_BASE_URL: /Affordance-Design/cases/001-bulk-assignment/prototype
+        run: npm run export:web
+
+      - name: Assemble eval site
+        run: |
+          mkdir -p _site/cases/001-bulk-assignment/prototype
+          cp evals/index.html _site/index.html
+          cp evals/cases/001-bulk-assignment/index.html _site/cases/001-bulk-assignment/index.html
+          cp evals/cases/001-bulk-assignment/case.json _site/cases/001-bulk-assignment/case.json
+          cp -R prototypes/assignment/runtime/dist-web/. _site/cases/001-bulk-assignment/prototype/
+          touch _site/.nojekyll
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
