@@ -7,10 +7,6 @@ on:
     paths:
       - 'prototypes/assignment/**'
       - '.github/workflows/assignment-prototype.yml'
-  pull_request:
-    paths:
-      - 'prototypes/assignment/**'
-      - '.github/workflows/assignment-prototype.yml'
   workflow_dispatch:
 
 jobs:
