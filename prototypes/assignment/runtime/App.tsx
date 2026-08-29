@@ -157,7 +157,7 @@ function AssignmentPrototype() {
             <Text fontWeight="600">Assign</Text>
           </Popover.Trigger>
 
-          <Adapt when="max-md">
+          <Adapt when="touchable">
             <Sheet modal dismissOnSnapToBottom snapPoints={[55]}>
               <Sheet.Overlay />
               <Sheet.Handle />
