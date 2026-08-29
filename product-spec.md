@@ -32,6 +32,48 @@ Full visual design, brand styling, decorative polish, and production visual-syst
 
 They may consume the validated structural prototype later, but they must not be allowed to hide or prematurely lock structural decisions.
 
+## Eval case requirement contract
+
+Every case published in Affordance Design Evals must contain enough product context to judge the design independently of hidden conversation history.
+
+Each case must explicitly provide:
+
+```yaml
+requirement_goal:
+background:
+current_state:
+optimization_direction: feature_creation | feature_upgrade | feature_optimization
+```
+
+The three optimization directions mean:
+
+- `feature_creation` — the target capability does not yet exist and a new user-facing capability is being introduced;
+- `feature_upgrade` — an existing capability is being materially expanded, changing its scope, behavior, supported situations, or user value;
+- `feature_optimization` — the functional scope remains substantially the same while the interaction, comprehension, efficiency, control, or recovery experience is improved.
+
+A case may contain additional constraints, known context, unresolved questions, expected behavior, and forbidden outcomes, but these four requirement fields are mandatory.
+
+The Eval page may expose evaluation context, design rationale, assertions, source links, and review status because it is a reviewer-facing surface.
+
+## Prototype surface purity
+
+The runnable prototype must contain only elements and content that would be visible to the real end user in the represented product state.
+
+Do not place evaluator, developer, or prototype-explanation content inside the product prototype.
+
+Forbidden examples include:
+
+- statements that the page is a prototype, eval, benchmark, demo, or test;
+- explanations of the intended interaction model;
+- instructions that exist only to help a reviewer understand what to click;
+- design rationale, implementation notes, state-machine descriptions, or expected behavior;
+- prototype-only page titles, section labels, legends, badges, or annotations that would not exist in the real product;
+- labels such as “Web version”, “Mobile version”, “current state”, “expected result”, or similar review metadata unless they are genuinely part of the product experience.
+
+A normal product label, heading, helper message, status, consequence message, empty state, or recovery action is allowed only when the represented user would actually see it in that product state.
+
+Evaluation explanation belongs outside the prototype, on the Eval case page or in machine-readable case metadata.
+
 ## Required observable behavior
 
 A runnable prototype should make the relevant parts of the following directly testable when present in the task:
@@ -47,6 +89,8 @@ A runnable prototype should make the relevant parts of the following directly te
 - proactive recommendation timing and interruption boundaries;
 - Web / Mobile presentation differences that preserve the same interaction semantics.
 
+These states must be observable through authentic product UI rather than prototype annotations.
+
 ## Visual fidelity constraint
 
 The default prototype should use only enough visual structure to communicate hierarchy, state, target, affordance, and feedback.
@@ -61,8 +105,9 @@ A design task is not complete merely because a plausible screen was generated.
 
 It is complete when:
 
-1. the structural model is explicit enough to inspect;
+1. the structural model is explicit enough to inspect outside the prototype;
 2. the important interactions are runnable;
 3. the prototype can expose wrong assumptions through use;
-4. the anti-average review has no unresolved ERROR-level failures;
-5. the prototype does not use visual polish to substitute for unresolved information architecture or interaction behavior.
+4. every visible prototype element can be justified as real user-facing product UI;
+5. the anti-average review has no unresolved ERROR-level failures;
+6. the prototype does not use visual polish or explanatory annotations to substitute for unresolved information architecture or interaction behavior.
