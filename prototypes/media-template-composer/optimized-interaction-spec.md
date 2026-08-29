@@ -1,200 +1,127 @@
 # Media + Template Composer — Optimized Interaction Specification
 
-This document is the Affordance Design result for Case 004. It is downstream of the frozen current-state baseline and does not use runtime component vocabulary.
+This is the Affordance Design result for Case 004. It is downstream of the frozen baseline and contains no runtime/component vocabulary.
 
 ## Problem frame
 
 ```yaml
-person: mobile user actively composing a text-first post
-current_situation: title/body draft already exists or is being created; visual content may still be absent
+person: mobile user composing a text-first post
 primary_task: finish a publishable post
 business_goal:
   - increase image-attached publishing rate
   - improve successful template usage
-desired_outcome: adding a relevant visual feels like a continuation of composing, not a detour into a source/tool catalog
-current_friction:
-  - direct media and generative/template capabilities are exposed as peer source tabs
-  - a specific high-value need, "make an image for this draft", is buried inside the broad template catalog
-  - the template catalog mixes functional and entertainment generators without first resolving user intent
-  - limited-photo permission friction dominates the panel whenever Album is active even if the user does not need device photos
-critical_decision: does the user already have the visual they want, want the system to make a visual from the current draft, or intentionally want to explore a broader template capability space?
+current_context:
+  - title/body/topics may already contain useful semantic input
+  - visual attachments may still be absent
+critical_question: does the user already have visual material, need a supporting visual from the current draft, or intentionally want to explore a broader template space?
 ```
 
-## Interaction state already known
-
-When the user is composing, the product may already know:
-
-```yaml
-current_object: current draft
-entered_context:
-  title: optional
-  body: optional
-  topics: optional
-committed_visuals: existing attachments
-active_edit_state: typing / selection / natural break
-```
-
-The optimized structure must reuse this context rather than making template flows begin from an empty tool state.
+The optimization must preserve Album, Video, Game assets, broad template exploration, camera/permission friction, and adjacent composer tools. Removing these capabilities is not an acceptable way to simplify the problem.
 
 ## Structural diagnosis
 
-### D1 — peer tabs expose acquisition taxonomy before user intent
+### D1 — current peer tabs mix different user intents
 
-Current peer tabs:
+Current root:
 
 ```text
 相册 / 视频 / 游戏素材 / 全部模板
 ```
 
-The first three are ways to obtain **existing material**. The fourth is a broader **creation/exploration capability space**.
+The first three are sources for **existing material**. The fourth is a **creation/exploration capability space**. Treating them as equivalent peers asks the user to translate a problem state into product taxonomy.
 
-They do not answer the same user question, so making them peer-level choices forces users to translate a problem state into product taxonomy.
+Relevant failures: AVG-001 and AVG-005.
 
-Relevant Skill failures:
+### D2 — `文字配图` is narrower than `全部模板`
 
-- AVG-001 — internal/product taxonomy exposed as user choice;
-- AVG-005 — grouping by eventual visual output despite different starting intent.
-
-### D2 — `文字配图` is semantically narrower than `全部模板`
-
-A user who wants a picture for the text they are currently writing has already expressed:
+For a user who wants a picture for the text currently being written:
 
 ```text
 target = current draft
 intent = create supporting visual
 ```
 
-Sending that user through `全部模板` makes a specific command-like need pass through an exploratory catalog. The catalog is useful for intentional exploration, but it should not be mandatory for the narrower job.
+Requiring broad template browsing before that task violates the affordance contract for a specific intent.
 
 ### D3 — current draft context is underused
 
-Title/body/topic state can reduce template input. Asking the user to restate the same content after entering a template violates the Skill's resolved-context rule.
+Title/body/topics can answer part of template/generation input. Asking users to restate the same content is AVG-002.
 
-### D4 — permission friction belongs to the existing-photo path
+### D4 — photo permission friction belongs only to the existing-photo path
 
-The limited-photo warning is relevant when the user chooses device photos. It should not occupy attention when the user is trying to generate a visual or browse templates.
+The limited-photo warning is relevant to Album. It should not dominate attention when the user wants generation or template exploration.
 
-### D5 — increasing visual adoption can justify a proactive entry, but not interruption
+### D5 — image-rate goal supports discoverability, but not interruption
 
-The business/user quality goal supports surfacing a contextual visual suggestion when:
-
-```text
-- draft has enough content to generate a meaningful visual;
-- no visual attachment exists yet;
-- the user is at a natural break rather than actively typing/selecting;
-- the suggestion is non-blocking and dismissible.
-```
-
-Mere inactivity is not sufficient.
+Visual options should remain discoverable at a natural non-editing state. Proactive suggestions may surface only when they are local, dismissible, and not competing with active typing/selection.
 
 ## Divergence
 
-### Candidate A — keep four source tabs, visually promote Templates
+### Candidate A — preserve four root tabs and visually promote templates
 
-```yaml
-assumption: low template usage is mainly a visibility problem
-interaction_model: preserve current tabs; make All templates more prominent and place Text image first
-advantage: minimal change
-failure_mode:
-  - retains source-taxonomy decision before intent
-  - still routes a narrow "make a picture for this draft" need through capability browsing
-  - risks optimizing prominence rather than workflow
-```
+**Rejected.** It changes prominence without fixing the intent/taxonomy mismatch and still makes narrow draft illustration pass through broad template browsing.
 
-**Rejected.** It does not resolve the structural mismatch.
+### Candidate B — one mixed visual picker
 
-### Candidate B — replace all sources with a single generic visual picker
-
-```yaml
-assumption: fewer visible choices always reduce complexity
-interaction_model: one Add visual entry opens one mixed grid of photos, videos, game assets, and templates
-advantage: fewer top-level controls
-failure_mode:
-  - hides materially different acquisition intents in one mixed result set
-  - increases scanning cost
-  - destroys direct source-specific behaviors such as camera/photo permission
-```
-
-**Rejected.** This is AVG-008 style simplification by element count.
+**Rejected.** Fewer top-level controls would hide materially different intents in one result set, increase scanning cost, and erase source-specific behavior such as photo permission/camera.
 
 ### Candidate C — problem-state launcher with context-aware shortcuts
 
-```yaml
-assumption: the first decision should reflect whether the user already has a visual, needs a visual from the current draft, or wants to explore creative templates
-interaction_model:
-  Add visual
-  → Existing media
-  → Generate from draft
-  → Explore templates
-advantage:
-  - preserves all current capability families
-  - separates narrow command from broad capability space
-  - lets current draft remove repeated input
-  - scopes photo permission friction to the path where it matters
-  - supports a non-blocking contextual shortcut for image-attached-rate goal
-failure_mode:
-  - adds a launcher layer, so each branch must resolve a real distinction and remain fast
-  - if labels are vague, launcher becomes another internal taxonomy
-```
-
-**Selected.** The first layer resolves a real user-state distinction and each branch has different unresolved information.
-
-## Selected structural model
-
-### Primary entry — `添加配图`
-
-The generic circular plus is not the main discoverability surface for the visual-content goal.
-
-The composer exposes a clear visual-content entry:
+**Selected.** The first structural question becomes:
 
 ```text
-添加配图
+从已有素材添加
+根据正文生成配图
+浏览创意模板
 ```
 
-This is a capability-space entry because the user has not yet specified how the visual should be obtained.
+Each branch begins with different known information and genuinely different unresolved questions.
 
-Opening it resolves the first required question:
+## Review correction — the launcher is not hidden by default
 
-```yaml
-unresolved_before: how should the visual be obtained?
-resolved_here:
-  - use existing material
-  - generate supporting image from current draft
-  - explore creative templates
-why_required: each path begins with different known context and requires different downstream questions
-```
+The first implementation placed the selected structure entirely behind an `添加配图` control. Automated behavior passed, but structural Review rejected that presentation because the baseline already keeps visual acquisition visible. Hiding the new structure would add one action to every explicit visual intent and reduce discoverability despite the image-rate goal.
 
-### Branch 1 — `从已有素材添加`
-
-This path means:
+Final visibility contract:
 
 ```text
-user already has or knows the source material they want
+non-active composition / initial visual-acquisition state
+→ problem-state launcher is visible in the existing lower workspace
+
+user focuses body for active writing
+→ lower visual flow yields to composition
+
+later re-entry
+→ 添加配图 reopens the same problem-state launcher
 ```
 
-Next structure:
+`添加配图` is therefore a re-entry/capability affordance, not a mandatory extra step before the first visible launcher.
+
+This correction preserves the structural grouping while avoiding a universal interaction tax.
+
+## Branch 1 — 从已有素材添加
+
+Choosing this branch means the user already has or knows the source material wanted.
+
+Only then is source type the next required distinction:
 
 ```text
 已有素材
-  相册 | 视频 | 游戏素材
+├─ 相册
+├─ 视频
+└─ 游戏素材
 ```
-
-Source tabs remain, but only **after** the user has already chosen the `existing material` problem state. Within that narrower intent, source type is a legitimate distinction.
 
 Album preserves:
 
-- limited-photo permission message;
-- `去设置`;
-- camera tile;
+- limited-photo permission message and `去设置`;
+- camera acquisition;
 - device-photo grid;
-- selection order;
+- selection state/order;
 - explicit Add commit.
 
-Video preserves device-video selection.
+Video preserves device-video selection. Game assets preserves its existing material catalog.
 
-Game assets preserves its existing material catalog.
-
-### Branch 2 — `根据正文生成配图`
+## Branch 2 — 根据正文生成配图
 
 This is a specific command-like path, not template browsing.
 
@@ -202,35 +129,31 @@ Known at invocation:
 
 ```yaml
 target: current draft
-intent: create a supporting image
+intent: supporting visual
 available_context:
   title: current title
   body: current body
   topics: current topics
 ```
 
-The flow must not ask the user to re-enter the draft.
-
 Default flow:
 
 ```text
 根据正文生成配图
-→ use current draft immediately
-→ generate 2–3 provisional visual candidates
-→ user may refine optional emphasis/style instruction
+→ bind current draft automatically
+→ generate 2–3 provisional candidates
+→ optional refinement
 → choose candidate
 → 插入正文
 ```
 
-If the draft has too little semantic content to generate a useful visual, the flow may ask one new question such as `你想表达什么？`; it must not fabricate meaning.
+The user must not re-enter the draft. If the draft lacks enough semantic information, the flow may ask one genuinely unresolved content question rather than fabricating meaning.
 
-Generated visuals remain system-provisional until explicit insertion.
+Generated candidates remain SYSTEM_PROVISIONAL until explicit insertion. Generation is ADD behavior and cannot rewrite user-authored title/body/topics.
 
-### Branch 3 — `浏览创意模板`
+## Branch 3 — 浏览创意模板
 
-This is intentionally a capability-space entry.
-
-It may expose a broad catalog because the user chose exploration.
+This is an intentional capability-space entry, so broad exploration is valid.
 
 First catalog structure:
 
@@ -239,102 +162,69 @@ First catalog structure:
 全部模板
 ```
 
-`适合当前内容` may use title/body/topics to rank or prefill templates, but recommendations remain optional and must not replace the user's draft.
+The broad heterogeneous families remain available, including neutral equivalents of card, loadout, identity, relationship, fortune, and prediction generators.
 
-The catalog preserves the current heterogeneous template families:
+`文字配图` may remain discoverable as an alias/related capability, but invoking it must resolve to the same direct draft-generation semantics as Branch 2 rather than creating a second incompatible workflow.
+
+## Template configuration rule
+
+For each represented template:
 
 ```text
-卡片生成器
-随机装备
-身份卡
-角色关系
-今日运势
-人生预测
-...
+required template inputs
+− title/body/topics already known
+= questions still unresolved
 ```
 
-`文字配图` is removed from this broad catalog as the mandatory path for draft illustration because it now has a direct semantic home under `根据正文生成配图`.
+Examples:
 
-It may still appear as a search synonym/related capability, but invoking it must resolve to the same direct generation semantics rather than a second incompatible flow.
+- a content-summary card may generate a first preview without duplicate text input;
+- an identity card may still require a person/character if none is known;
+- a loadout generator may require a game/mode scope if that scope is unresolved;
+- decorative options should not block first preview unless they are required to determine the result.
+
+Template previews remain provisional until explicit insertion.
 
 ## Contextual image suggestion
 
-To support image-attached publishing without interrupting active composition:
-
-Eligibility:
+When the lower visual flow has yielded to active writing, the system may later offer a local nonblocking suggestion only if:
 
 ```yaml
 body_has_meaningful_content: true
 visual_attachment_count: 0
 active_typing_or_selection: false
-suggestion_previously_dismissed_without_state_change: false
+visual_flow_open: false
+same_suggestion_was_dismissed_without_meaningful_change: false
 ```
 
-At a natural break, show a small local suggestion near the composer tools:
+At a modeled natural break:
 
 ```text
 给这段内容配张图
 [生成配图] [从相册选]
 ```
 
-Semantics:
+Shortcut semantics:
 
-- `生成配图` enters Branch 2 with draft context already bound;
-- `从相册选` skips the `Existing media` source chooser because the shortcut already selected Album;
+- `生成配图` enters Branch 2 directly because the shortcut already expresses acquisition intent;
+- `从相册选` enters Album directly because it already expresses both existing-material intent and source;
 - dismissing does not alter the draft;
-- the same suggestion does not reappear merely because time passed;
-- it may be reconsidered only after draft content changes enough to make the previous recommendation stale.
+- time alone cannot resurface the same suggestion;
+- reconsideration requires enough content change to make the previous recommendation basis stale.
 
-This is an allowed multiple-access-path optimization: the shortcut skips questions its label already answered.
-
-## Template configuration rule
-
-For each template:
-
-```text
-required template inputs
-− title/body/topics already known
-= questions that still need to be asked
-```
-
-Examples:
-
-- a text-summary card may require no additional text input and can go directly to preview;
-- an identity card may require a person/character name if none can be inferred safely;
-- a random-loadout template may require only a game/mode scope if that scope is not already known;
-- optional decorative controls should not block first preview generation.
-
-## Ownership and mutation
-
-Visual generation is ADD behavior relative to the text draft.
-
-```yaml
-may_compute: yes after deliberate generation command; optional recommendation ranking may compute proactively
-may_surface: generated candidates only in the relevant local generation/template context
-may_commit: no until user selects and inserts
-```
-
-Title/body/topics remain user-owned and cannot be rewritten by visual generation.
+The prototype uses deterministic thresholds only to make this rule executable. Production definitions of “natural break” and “changed enough” remain Open.
 
 ## Interaction weight
 
-### Existing media
+- Existing media: low-to-medium; stays local to the composer.
+- Draft generation: medium; needs local persistent space for several candidates and refinement.
+- Creative template exploration: medium-to-high; may use deeper local space while preserving obvious return to the same draft.
 
-Low-to-medium weight. Keep local to the composer in a transient panel.
-
-### Generate from draft
-
-Medium weight with provisional results. It needs enough persistent local space for multiple candidate previews and optional refinement, but should not navigate away from the draft.
-
-### Creative template exploration
-
-Medium-to-high weight. Catalog exploration and configuration can use a deeper sheet/page-like surface while retaining an obvious return to the same draft state.
-
-The broader template workflow must not be compressed into a tiny popover just because it launches from the composer toolbar.
+No branch navigates away solely because its runtime implementation is easier on a separate page.
 
 ## Required state persistence
 
-All three branches preserve:
+All visual paths preserve:
 
 ```text
 title
@@ -342,65 +232,35 @@ body
 topics
 mentions
 committed attachments
-scroll/edit context where technically feasible
 ```
 
-A user may move among visual-acquisition paths without restarting the draft.
+Visual generation never mutates user-authored text.
 
-## Anti-average review
+## Anti-average review contract
 
-### AVG-001 — PASS
+- AVG-001: root choices represent problem state, not source modules.
+- AVG-002: current draft context is subtracted from downstream questions.
+- AVG-003: direct generation does not expand into broad template space.
+- AVG-004: launcher exists only where acquisition intent is unresolved; shortcuts skip it when already resolved.
+- AVG-005: capabilities are not grouped merely because all eventually produce a visual.
+- AVG-008: no baseline capability is deleted to claim simplicity.
+- AVG-009: multiple paths may have different step counts when their known context differs.
+- AVG-012: generated visuals add attachments; they do not replace user-owned draft text.
+- AVG-015/016: contextual suggestion must remain local and absent during active composition.
+- AVG-023: reviewer/Eval rationale never appears in product UI.
 
-Top-level choices represent user problem states, not backend/source modules.
+## Verification targets
 
-### AVG-002 — PASS
-
-Draft text is reused by draft-image generation and compatible templates.
-
-### AVG-003 — PASS
-
-Specific `生成配图` does not open the broad template catalog.
-
-### AVG-004 — PASS
-
-The new first layer resolves a necessary acquisition-intent distinction. Shortcut paths skip it when their affordance already answers that distinction.
-
-### AVG-005 — PASS
-
-Capabilities are not grouped solely because they eventually create a visual attachment.
-
-### AVG-008 — PASS
-
-No current capability family is deleted to claim simplicity.
-
-### AVG-009 — PASS
-
-Contextual `从相册选` skips the existing-material source chooser; direct `生成配图` skips template browsing.
-
-### AVG-012 — PASS
-
-Generated visual output adds an attachment and does not replace draft text.
-
-### AVG-015/016 — PASS conditionally
-
-Contextual suggestion is gated to a natural break and remains dismissible/non-blocking.
-
-### AVG-023 — implementation requirement
-
-No reviewer rationale or Eval language may enter the product prototype.
-
-## Verification targets for optimized prototype
-
-1. Draft title/body survive all visual-acquisition paths.
-2. `添加配图` reveals exactly the three problem-state choices.
-3. Existing-media branch still exposes Album, Video, and Game assets.
-4. Album still exposes permission friction, camera, grid, selection, and explicit commit.
-5. `根据正文生成配图` consumes existing draft context without requiring re-entry.
-6. Generation produces provisional candidates and requires explicit insertion.
-7. `浏览创意模板` preserves broad exploration and heterogeneous templates.
-8. Choosing a template asks only unresolved template-specific inputs.
-9. Contextual suggestion appears only after a modeled natural break when draft has content and no visual attachment.
-10. `从相册选` shortcut opens Album directly rather than re-asking source.
-11. `生成配图` shortcut opens draft generation directly rather than re-asking acquisition intent.
-12. Dismissing the suggestion does not alter draft state and does not immediately resurface without meaningful state change.
-13. No current baseline capability family is lost.
+1. The problem-state launcher is visible initially/non-actively without requiring a preliminary Add tap.
+2. Focusing body yields the visual panel to active composition.
+3. `添加配图` can reopen the same launcher after it is closed/yielded.
+4. The launcher contains exactly existing material / generate from draft / explore templates.
+5. Existing-media branch preserves Album, Video, Game assets and Album permission/camera/grid/selection/commit behavior.
+6. Draft generation consumes current context without re-entry, produces provisional candidates, and requires explicit insertion.
+7. Creative-template exploration remains broad and heterogeneous.
+8. A represented template asks only unresolved template-specific input.
+9. Contextual suggestion appears only after a modeled natural break with meaningful draft content and no visual attachment.
+10. Album/generation shortcuts skip layers whose questions their affordances already answer.
+11. Dismissal does not mutate draft or immediately resurface without meaningful change.
+12. Adjacent topic/emoji/mention/settings behavior remains operable.
+13. No baseline capability family is lost.
