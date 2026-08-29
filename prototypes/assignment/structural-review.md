@@ -11,8 +11,8 @@ Did mapping the frozen interaction model to Tamagui preserve the intended user-s
 - `runtime/assignment-model.ts` — platform-independent selection/assign/undo semantics.
 - `runtime/assignment-model.test.ts` — mechanical state-transition tests.
 - `runtime/App.tsx` — Tamagui Web/Mobile presentation.
-- `runtime/e2e/assignment.spec.ts` — local exported-Web pointer/touch operation tests.
-- `runtime/e2e/pages-smoke.mjs` — deployed Pages pointer/touch operation test.
+- `runtime/e2e/assignment.spec.ts` — local exported-Web pointer/touch operation and prototype-surface regression tests.
+- `runtime/e2e/pages-smoke.mjs` — deployed Pages pointer/touch operation and prototype-surface regression test.
 - GitHub Actions — model tests, typecheck, Web export, iOS export, local browser operation, Pages build/deploy, and deployed browser smoke.
 
 ## Frozen semantic contract
@@ -69,8 +69,6 @@ A first implementation used viewport width as the adaptation proxy. Review rejec
 
 After the animation-driver fix, Playwright operates both pointer Web and touch/mobile Web through the same semantic path successfully. GitHub Pages is also smoke-tested after deployment in both contexts.
 
-This preserved the frozen task model while changing only presentation/runtime configuration.
-
 ### R6 — Consequence and recovery
 
 **PASS for model and exported-Web operation**
@@ -85,13 +83,23 @@ The local browser benchmark executes assignment and Undo in pointer and touch/mo
 
 Chooser open/close state is independent from selected work-order IDs. The pointer browser test opens the chooser, dismisses it with Escape, verifies that the three-item selection remains, and reopens Assign without re-selecting the target set.
 
-The platform-independent state model also keeps selection ownership outside chooser visibility.
+### R8 — Prototype surface purity
 
-### R8 — Visual fidelity does not hide structure
+**PASS after revision**
 
-**PASS by source and browser-operation review**
+The earlier prototype leaked reviewer-facing explanation into the product surface:
 
-The prototype uses plain stacks, text, simple borders, selection markers, buttons, and a single transient choice surface. It does not add brand styling, decorative dashboards, ornamental cards, marketing imagery, gradients, or visual-system polish.
+- `Structural prototype: selection → Assign → technician → commit → Undo`;
+- `Choose one technician. Selection commits immediately and can be undone.`;
+- a `Work queue` heading that was not established by the case requirement as part of the represented product state.
+
+Those elements were removed.
+
+The runnable prototype now contains only product interaction content supported by the represented state: selected count, Assign, technician chooser, work-order rows and assignees, committed-result feedback, and Undo.
+
+Requirement goal, background, current state, optimization direction, expected behavior, rationale, and review information remain on the Eval case page or in `case.json`, outside the product runtime.
+
+Local and deployed browser tests guard the known leaked strings as regression cases. This remains deliberately case-specific: whether arbitrary future content is genuinely user-facing is a design judgment and must not be replaced by a generic keyword detector.
 
 ## Runtime issues discovered without redesigning the interaction
 
@@ -105,7 +113,7 @@ The iOS bundle exposed a missing `react-native-safe-area-context` dependency req
 
 ### Missing Tamagui v5 animation driver caused a touch-only blank screen
 
-The base `@tamagui/config/v5` configuration does not include an animation driver. The touch/mobile path renders a Sheet, whose animation state requires a driver. In touch browser emulation this produced the runtime error:
+The base `@tamagui/config/v5` configuration does not include an animation driver. The touch/mobile path renders a Sheet, whose animation state requires a driver. In touch browser emulation this produced:
 
 ```text
 Cannot read properties of undefined (reading 'setValue')
@@ -113,21 +121,13 @@ Cannot read properties of undefined (reading 'setValue')
 
 Because the error occurred during render, the deployed prototype appeared blank on touch/mobile devices while pointer Web could still work.
 
-The fix was configuration-only:
+The runtime configuration was corrected with the Tamagui v5 React Native animation driver. The interaction specification, state model, action scopes, chooser semantics, and recovery behavior did not change.
 
-```text
-@tamagui/config/v5
-+
-@tamagui/config/v5-rn animations
-```
-
-The interaction specification, state model, action scopes, chooser semantics, and recovery behavior were not changed.
-
-This failure is important evidence for the engineering boundary: a runtime problem should first change implementation/configuration, not force a redesign of a validated interaction model.
+This failure also changed the verification standard: static export and successful Pages deployment are insufficient evidence that an eval prototype is usable. The public deployed prototype must be opened and operated after deployment.
 
 ## Mechanical and runtime verification
 
-Current confirmed evidence:
+Confirmed:
 
 ```text
 platform-independent model tests: PASS (4/4)
@@ -136,13 +136,15 @@ Web Expo export: PASS
 iOS Expo export: PASS
 local pointer Web operation: PASS
 local touch/mobile Web operation: PASS
+pointer dismissal preserves selection: PASS
+known prototype-copy leakage regression: PASS
 GitHub Pages build: PASS
 GitHub Pages deploy: PASS
 deployed desktop-pointer smoke: PASS
 deployed touch-mobile smoke: PASS
 ```
 
-The deployed smoke test opens the public prototype URL, verifies the initial `3 selected` state, invokes Assign, verifies the expected platform presentation, selects a technician, and verifies committed feedback while failing on any browser page/console error.
+The deployed smoke opens the public prototype URL, verifies initial selection, invokes Assign, verifies the expected platform presentation, selects a technician, verifies committed feedback, rejects browser runtime errors, and rejects the known reviewer-only strings.
 
 ## Not yet verified
 
@@ -159,11 +161,9 @@ The following are intentionally not claimed as complete:
 
 The prototype remains structurally valid after implementation and browser-operation review.
 
-Review overturned two implementation assumptions without overturning the upstream interaction model:
+Review overturned implementation assumptions without overturning the upstream interaction model, and it also removed evaluation scaffolding that had leaked into the product surface.
 
-1. viewport-width adaptation was replaced by input-capability adaptation;
-2. the incomplete Tamagui v5 configuration was corrected with an explicit animation driver after touch/mobile execution exposed a blank-screen runtime failure.
+This establishes two distinct boundaries:
 
-The second failure also changed the verification standard: static export and successful deployment are no longer sufficient evidence that an eval prototype is usable. Pages deployment now has a post-deploy browser smoke gate for pointer and touch/mobile contexts.
-
-This is an intended capability of the Skill: Review must be able to reject its just-completed implementation while preserving upstream decisions that still hold.
+1. runtime problems should first change implementation/configuration rather than rewrite a validated interaction model;
+2. reviewer context belongs to the Eval layer, while the runnable prototype must stand on authentic product UI alone.
