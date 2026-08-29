@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "Media Template Composer Baseline",
+    "slug": "media-template-composer-baseline",
+    "version": "0.0.1",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
