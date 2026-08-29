@@ -22,6 +22,7 @@ Make Affordance Design produce runnable, block-like structural prototypes for We
 6. Run cross-platform interaction benchmarks and verify runtime mapping does not redefine semantics.
 7. Publish runnable Eval cases through GitHub Pages for human review.
 8. Formalize complete Eval requirement context and the user-only prototype-surface boundary.
+9. Add a second runnable Eval that exercises a distinct Affordance rule: an explicit command must not expand into an unrelated capability catalog.
 
 ## Completed
 
@@ -70,9 +71,11 @@ The latest public validation confirms:
 - the known reviewer-only strings do not appear in the product prototype;
 - no browser runtime errors were observed by the smoke test.
 
+Milestone 9 is now the active unblocked work. Its source benchmark is Skill Eval 2: a contact-management app where invoking the explicit `Merge contacts` command incorrectly opens a broad menu containing unrelated actions. The new runnable case must preserve the command's narrow semantics and proceed only through genuinely unresolved merge-specific decisions.
+
 ## Open Issues
 
-- Actual native Sheet interaction still needs simulator or physical-device evidence.
+- Actual native Sheet interaction still needs simulator or physical-device evidence. The current connected environment cannot operate an iOS/Android simulator or physical device, so this remains an external validation blocker rather than a reason to stop other unblocked milestones.
 - Keyboard/focus behavior is only partially reviewed; pointer Escape dismissal is covered, not the full accessibility path.
 - Long-list touch gesture quality and production accessibility remain unverified.
 - Prototype-surface purity is a semantic design judgment; generic keyword detection must not replace Review of whether each visible element genuinely belongs to the end-user product.
@@ -91,6 +94,7 @@ The latest public validation confirms:
 - Every visible prototype element/string must be justifiable as real user-facing product UI for the represented state.
 - Non-rendered verification instrumentation is allowed when it does not alter visible product behavior.
 - Build/export/deploy success is insufficient; public prototypes must also pass browser operation.
+- Milestone 9 must begin from a contact-merge interaction specification that contains no Tamagui component vocabulary. Runtime mapping happens only after that specification and structural review criteria are fixed.
 
 ## Constraints
 
@@ -100,6 +104,7 @@ The latest public validation confirms:
 - Runtime failures should first change implementation/configuration, not a still-valid upstream interaction model.
 - Do not add prototype-only labels, headings, legends, annotations, interaction explanations, platform labels, or evaluator instructions.
 - Do not duplicate case requirement facts across README, reviewer HTML, catalog, and machine fixture.
+- Case 002 must exercise command-affordance semantics rather than becoming another generic component showcase.
 
 ## Hypotheses
 
@@ -107,6 +112,7 @@ The latest public validation confirms:
 - Loading runtime/component knowledge only after structural choice reduces component-led convergence.
 - Removing evaluator scaffolding makes weak affordances easier to detect because the prototype must stand on authentic product UI alone.
 - Complete requirement briefs improve Eval transferability and reduce dependence on hidden conversation context.
+- A second structurally distinct case will reveal whether the current runtime organization can support multiple Eval prototypes without premature abstraction.
 
 ## Deferred
 
@@ -119,13 +125,15 @@ The latest public validation confirms:
 
 ## Next
 
-1. Operate at least one native Mobile target before claiming native runtime completion.
-2. Add the next Eval only when it exercises a distinct Affordance rule and begins with the complete requirement contract.
-3. After two or three distinct cases exist, compare with-Skill vs without-Skill structural decisions.
+1. Define Case 002's complete requirement fixture and freeze its merge-specific interaction model before implementation.
+2. Implement and test a runnable Web/touch structural prototype using Tamagui only after the interaction model is fixed.
+3. Publish Case 002 through the existing Eval catalog and Pages pipeline, then operate the public prototype.
+4. Operate at least one native Mobile target when an environment with simulator/physical-device access becomes available.
+5. After two or three distinct cases exist, compare with-Skill vs without-Skill structural decisions.
 
 ## Verification
 
-Current verified checkpoint:
+Current verified checkpoint before Milestone 9:
 
 ```text
 platform-independent assignment model: PASS (4/4)
@@ -133,7 +141,7 @@ TypeScript: PASS
 Web Expo export: PASS
 iOS Expo export: PASS
 local desktop-pointer interaction: PASS
-local touch-mobile interaction: PASS
+local touch/mobile interaction: PASS
 known prototype-copy leakage regression: PASS
 mandatory Eval requirement fixture validation: PASS
 catalog manifest generation: PASS
@@ -144,5 +152,16 @@ public Case requirement rendering: PASS
 public desktop-pointer prototype operation: PASS
 public touch-mobile prototype operation: PASS
 ```
+
+Milestone 9 completes when:
+
+- Case 002 has a complete canonical requirement fixture;
+- its interaction specification is frozen before runtime mapping and contains no Tamagui component vocabulary;
+- the runnable prototype keeps `Merge contacts` semantically narrow and exposes only merge-specific unresolved decisions;
+- unrelated capabilities do not appear after invoking Merge;
+- pointer and touch variants preserve the same merge semantics;
+- prototype-visible content is authentic product UI only;
+- automated state-model/browser checks pass;
+- the published Case 002 requirement page and public prototype pass post-deploy smoke verification.
 
 The remaining runtime milestone closes only after at least one native Mobile target is operated successfully.
