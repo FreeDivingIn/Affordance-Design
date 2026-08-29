@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import {
   Adapt,
   Button,
@@ -215,8 +216,10 @@ function AssignmentPrototype() {
 
 export default function App() {
   return (
-    <TamaguiProvider config={tamaguiConfig} defaultTheme="light">
-      <AssignmentPrototype />
-    </TamaguiProvider>
+    <SafeAreaProvider>
+      <TamaguiProvider config={tamaguiConfig} defaultTheme="light">
+        <AssignmentPrototype />
+      </TamaguiProvider>
+    </SafeAreaProvider>
   )
 }
