@@ -77,9 +77,10 @@ function AssignmentPrototype() {
   const [lastCommit, setLastCommit] = useState<AssignmentCommit | null>(null)
 
   const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds])
+  const canAssign = selectedIds.length > 0
 
   const assign = (technician: string) => {
-    if (selectedIds.length === 0) return
+    if (!canAssign) return
 
     const result = assignWorkOrders(workOrders, selectedIds, technician)
     setPreviousAssignment(result.snapshot)
@@ -139,13 +140,24 @@ function AssignmentPrototype() {
 
         <Popover
           open={assignmentOpen}
-          onOpenChange={setAssignmentOpen}
+          onOpenChange={(nextOpen) => setAssignmentOpen(canAssign ? nextOpen : false)}
           placement="bottom-end"
           stayInFrame
           allowFlip
         >
-          <Popover.Trigger asChild>
-            <Button disabled={selectedIds.length === 0}>Assign</Button>
+          <Popover.Trigger
+            accessibilityRole="button"
+            accessibilityState={{ disabled: !canAssign }}
+            pointerEvents={canAssign ? 'auto' : 'none'}
+            opacity={canAssign ? 1 : 0.5}
+            borderWidth={1}
+            borderColor="$borderColor"
+            borderRadius="$4"
+            paddingHorizontal="$4"
+            paddingVertical="$2"
+            alignItems="center"
+          >
+            <Text fontWeight="600">Assign</Text>
           </Popover.Trigger>
 
           <Adapt when="max-md">
