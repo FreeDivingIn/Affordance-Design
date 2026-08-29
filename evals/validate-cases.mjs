@@ -1,4 +1,4 @@
-import { readdir, readFile, stat } from 'node:fs/promises'
+import { mkdir, readdir, readFile, stat, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 
 const casesRoot = path.resolve('evals/cases')
@@ -7,6 +7,12 @@ const allowedDirections = new Set([
   'feature_upgrade',
   'feature_optimization',
 ])
+const manifestFlagIndex = process.argv.indexOf('--manifest')
+const manifestPath = manifestFlagIndex >= 0 ? process.argv[manifestFlagIndex + 1] : null
+
+if (manifestFlagIndex >= 0 && !manifestPath) {
+  throw new Error('--manifest requires an output path')
+}
 
 function requireNonEmptyString(value, field, caseId) {
   if (typeof value !== 'string' || value.trim().length === 0) {
@@ -15,7 +21,7 @@ function requireNonEmptyString(value, field, caseId) {
 }
 
 const entries = await readdir(casesRoot)
-let caseCount = 0
+const caseIds = []
 
 for (const entry of entries.sort()) {
   const caseDir = path.join(casesRoot, entry)
@@ -46,12 +52,23 @@ for (const entry of entries.sort()) {
     throw new Error(`${entry}: case.json id must match its directory name`)
   }
 
-  caseCount += 1
+  caseIds.push(entry)
   console.log(`[PASS] ${entry}: complete requirement brief`)
 }
 
-if (caseCount === 0) {
+if (caseIds.length === 0) {
   throw new Error('No eval cases found under evals/cases')
 }
 
-console.log(`[PASS] validated ${caseCount} eval case(s)`)
+if (manifestPath) {
+  const absoluteManifestPath = path.resolve(manifestPath)
+  await mkdir(path.dirname(absoluteManifestPath), { recursive: true })
+  await writeFile(
+    absoluteManifestPath,
+    `${JSON.stringify({ cases: caseIds }, null, 2)}\n`,
+    'utf8'
+  )
+  console.log(`[PASS] generated eval manifest: ${manifestPath}`)
+}
+
+console.log(`[PASS] validated ${caseIds.length} eval case(s)`)
