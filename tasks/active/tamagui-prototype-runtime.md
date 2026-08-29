@@ -50,9 +50,20 @@ Make Affordance Design produce runnable, block-like structural prototypes for We
   - platform-independent tests, TypeScript, Web export, iOS export, and local pointer/touch browser operation passed in workflow run `33227904340`;
   - Pages build, deploy, Case 001 regression smoke, and public Case 002 pointer/touch smoke passed in workflow run `33227940423`.
 
+- Milestone 10 is complete as Case 003 `Move Access Paths`:
+  - generic `Move` asks for destination because it is unresolved; the drag path uses the drop-supplied destination directly;
+  - both paths remain one conceptual action with shared result and recovery semantics;
+  - model tests, TypeScript, Web/iOS export, local pointer/touch operation, and public smoke passed.
+- Case 004 `Media + Template Composer` is complete through the baseline-vs-optimized structural comparison: frozen current-state baseline, Skill-optimized runtime, side-by-side reviewer page, and `evals/cases/004-media-template-composer/comparison.md`.
+- The first with-Skill vs without-Skill structural comparison is complete (`evals/comparisons/with-vs-without-skill-001.md`, run 001, 2026-08-29):
+  - four independent baselines, each blind-scored against its case.json assertions by a separate judge;
+  - baseline failures concentrated where the Skill carries explicit guards (confirmation creep under platform pressure in 001; taxonomy-first vs problem-state-first structure in 004);
+  - cases 002/003 scored perfect rubrics from model prior, motivating rawer briefs and multi-run follow-ups;
+  - evidence limits (n=1 per case, same model family, spec-level only) are recorded in the comparison document.
+
 ## Current State
 
-Two structurally distinct runnable Evals are now public:
+Four structurally distinct runnable Evals are now public:
 
 ```text
 Case 001 — Bulk Assignment
@@ -60,6 +71,12 @@ Case 001 — Bulk Assignment
 
 Case 002 — Merge Command Contract
   tests whether an explicit command is improperly broadened into capability space
+
+Case 003 — Move Access Paths
+  tests whether multiple invocation paths skip already-resolved questions
+
+Case 004 — Media + Template Composer
+  tests a real-case complex mobile composer: frozen baseline vs Skill-optimized structure
 ```
 
 The Eval information boundary remains:
@@ -77,7 +94,7 @@ interaction spec + runtime
 → user-visible product UI only
 ```
 
-Milestone 10 is the next unblocked work. Its source benchmark is Skill Eval 3: a logistics app supports `Move` through a generic action command and through dragging a shipment onto a destination depot. The important distinction is that drag already supplies the destination, so forcing both paths through the same destination picker would re-ask resolved context.
+All ten milestones are complete. The first with-Skill vs without-Skill comparison (run 001) is published at `evals/comparisons/with-vs-without-skill-001.md`.
 
 ## Open Issues
 
@@ -128,11 +145,13 @@ Milestone 10 is the next unblocked work. Its source benchmark is Skill Eval 3: a
 
 ## Next
 
-1. Define Case 003's complete logistics requirement fixture and freeze the access-path semantic model before implementation.
-2. Implement both Move paths so the generic command asks for destination while drag-to-depot uses the already-supplied destination directly.
-3. Verify both paths produce the same conceptual move result and recovery behavior without identical intermediate steps.
-4. Publish Case 003 and run local/public pointer/touch verification.
-5. With three distinct cases available, begin with-Skill vs without-Skill structural comparison when an execution environment can provide independent baseline runs.
+Follow-up candidates from comparison run 001 (each enters its own alignment cycle when prioritized):
+
+1. Multi-run baselines (n≥3 per case) and at least one different model family, to bound the n=1 and same-family confounds.
+2. A second comparison run with rawer briefs (no known/unresolved decomposition) to measure the Skill's decomposition contribution.
+3. Case 003 fixture hardening: the current brief states the resolution inside `current_state`, making it nearly self-answering.
+4. Case 004 rubric separation: split interaction assertions from process assertions; make F1 self-contained.
+5. Runnable baseline prototypes for behavioral comparison, if a second spec-level run justifies the cost.
 
 ## Verification
 
