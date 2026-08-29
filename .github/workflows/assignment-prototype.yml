@@ -40,3 +40,9 @@ jobs:
 
       - name: Export iOS bundle
         run: npm run export:ios
+
+      - name: Install Chromium for interaction benchmark
+        run: npx playwright install --with-deps chromium
+
+      - name: Operate pointer and touch Web flows
+        run: npm run test:web
