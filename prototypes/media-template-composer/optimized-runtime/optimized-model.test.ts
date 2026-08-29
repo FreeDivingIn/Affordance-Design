@@ -14,6 +14,15 @@ import {
   updateBody,
 } from './optimized-model.ts'
 
+test('visual launcher is discoverable before active body composition', () => {
+  let state = createInitialState()
+  assert.equal(state.flow, 'launcher')
+
+  state = setBodyFocused(state, true)
+  assert.equal(state.flow, null)
+  assert.equal(state.bodyFocused, true)
+})
+
 test('visual suggestion waits for a natural break and enough draft context', () => {
   let state = createInitialState()
   state = updateBody(state, '这是一段已经形成明确主题的正文内容。')
@@ -28,6 +37,8 @@ test('visual suggestion waits for a natural break and enough draft context', () 
 test('dismissed suggestion does not resurface until the draft changes materially', () => {
   let state = createInitialState()
   state = updateBody(state, '这是一段已经形成明确主题的正文内容。')
+  state = setBodyFocused(state, true)
+  state = setBodyFocused(state, false)
   state = dismissVisualSuggestion(state)
 
   assert.equal(shouldShowVisualSuggestion(state), false)
