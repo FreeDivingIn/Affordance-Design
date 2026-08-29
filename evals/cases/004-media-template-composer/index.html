@@ -16,6 +16,8 @@
     p, li { line-height: 1.5; }
     .muted { opacity: .68; }
     .grid { display: grid; grid-template-columns: minmax(320px, 430px) minmax(390px, 1fr); gap: 18px; align-items: start; }
+    .prototypes { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+    figure { margin: 0; }
     .panel { border: 1px solid color-mix(in srgb, CanvasText 20%, transparent); padding: 16px; }
     .direction { display: inline-block; border: 1px solid color-mix(in srgb, CanvasText 22%, transparent); padding: 4px 8px; font-size: 13px; }
     ul { margin: 0; padding-left: 20px; }
@@ -45,14 +47,25 @@
         <div id="requirement-content">Loading requirement…</div>
         <div class="links">
           <a href="./baseline/" target="_blank" rel="noreferrer">Open current-state baseline</a>
+          <a href="./prototype/" target="_blank" rel="noreferrer">Open optimized Skill output</a>
           <a href="./case.json" target="_blank" rel="noreferrer">case.json</a>
           <a href="./source-observations.md" target="_blank" rel="noreferrer">source observations</a>
+          <a href="./comparison.md" target="_blank" rel="noreferrer">structural comparison</a>
         </div>
       </aside>
 
       <section>
-        <div class="status"><strong>Current phase:</strong> current-state reconstruction. The optimized Skill output is intentionally not substituted for the baseline.</div>
-        <iframe src="./baseline/" title="Current-state mobile composer reconstruction"></iframe>
+        <div class="status"><strong>Current phase:</strong> baseline vs optimized comparison. Both artifacts are live: the frozen current-state reconstruction and the Affordance Design optimized runtime. Structural differences are recorded in the comparison document; no metric uplift is claimed.</div>
+        <div class="prototypes">
+          <figure>
+            <h3>Current-state baseline</h3>
+            <iframe src="./baseline/" title="Current-state mobile composer reconstruction"></iframe>
+          </figure>
+          <figure>
+            <h3>Optimized Skill output</h3>
+            <iframe src="./prototype/" title="Affordance Design optimized mobile composer"></iframe>
+          </figure>
+        </div>
       </section>
     </div>
   </main>
