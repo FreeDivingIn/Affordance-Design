@@ -1,13 +1,13 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
 
-async function expectInitialSelection(page: Parameters<typeof test>[0] extends never ? never : any) {
+async function expectInitialSelection(page: Page) {
   await expect(page.getByTestId('selection-count')).toHaveText('3 selected')
   await expect(page.getByTestId('work-order-WO-1042')).toContainText('Unassigned')
   await expect(page.getByTestId('work-order-WO-1048')).toContainText('Taylor Kim')
   await expect(page.getByTestId('work-order-WO-1051')).toContainText('Unassigned')
 }
 
-async function commitAndUndo(page: Parameters<typeof test>[0] extends never ? never : any) {
+async function commitAndUndo(page: Page) {
   await page.getByTestId('technician-avery-chen').click()
 
   await expect(page.getByTestId('assignment-feedback')).toContainText(
