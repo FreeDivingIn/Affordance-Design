@@ -3,7 +3,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import {
   Adapt,
   Button,
-  Paragraph,
   Popover,
   ScrollView,
   Sheet,
@@ -46,14 +45,9 @@ function AssignmentChooser({
 }) {
   return (
     <YStack gap="$3" minW={260}>
-      <YStack gap="$1">
-        <Text fontSize="$6" fontWeight="700">
-          Assign {selectedCount} work orders
-        </Text>
-        <Paragraph size="$3" color="$color10">
-          Choose one technician. Selection commits immediately and can be undone.
-        </Paragraph>
-      </YStack>
+      <Text fontSize="$6" fontWeight="700">
+        Assign {selectedCount} work orders
+      </Text>
 
       <YStack gap="$2">
         {technicians.map((technician) => (
@@ -105,15 +99,6 @@ function AssignmentPrototype() {
 
   return (
     <YStack flex={1} bg="$background" p="$4" gap="$4">
-      <YStack gap="$1">
-        <Text fontSize="$8" fontWeight="700">
-          Work queue
-        </Text>
-        <Paragraph color="$color10">
-          Structural prototype: selection → Assign → technician → commit → Undo
-        </Paragraph>
-      </YStack>
-
       {lastCommit ? (
         <XStack
           testID="assignment-feedback"
