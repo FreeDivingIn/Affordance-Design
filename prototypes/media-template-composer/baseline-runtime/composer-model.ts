@@ -124,7 +124,23 @@ export function commitSelectedMedia(
 ): ComposerState {
   const selected = new Set(state.selectedMediaIds)
   const existing = new Set(state.draft.attachments.map((item) => item.id))
-  const additions = items.filter((item) => selected.has(item.id) && !existing.has(item.id))
+  const itemById = new Map(items.map((item) => [item.id, item]))
+
+  const additions = state.selectedMediaIds
+    .filter((id) => !existing.has(id))
+    .map((id) => {
+      const known = itemById.get(id)
+      if (known) return known
+      if (id.startsWith('camera-')) {
+        return {
+          id,
+          kind: 'photo' as const,
+          label: '拍摄照片',
+        }
+      }
+      return null
+    })
+    .filter((item): item is Attachment => item !== null && selected.has(item.id))
 
   return {
     ...state,
