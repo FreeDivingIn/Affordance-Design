@@ -1,14 +1,22 @@
 # Case 001 — Bulk Assignment
 
-## Purpose
+## Requirement goal
 
-Test whether the Skill preserves a concrete command contract after the user has already supplied the target selection.
+Allow a field-operations coordinator to reassign multiple already-selected work orders to one technician quickly, while keeping the result clear and recoverable.
 
-## Input
+## Background
 
-A field-operations coordinator is triaging a work queue. Several work orders are already selected. The coordinator invokes `Assign`.
+Field-operations coordinators triage a shared work queue throughout the day. They often select several work orders that need the same technician and then perform a batch assignment while remaining in the queue context.
 
-The system already knows the selected work orders and the chosen command. The remaining required decision is the technician who should receive them.
+## Current state
+
+The work queue already supports multi-selection and an `Assign` action, but the current assignment flow treats invocation as the start of a new generic assignment process: it re-establishes target context and adds decision/confirmation steps even though the selected work orders and the `Assign` intent are already known.
+
+## Optimization direction
+
+`feature_optimization`
+
+The functional capability already exists. This case evaluates whether the same capability can be made more direct, context-aware, and recoverable without expanding its scope.
 
 ## Expected observable behavior
 
@@ -20,6 +28,7 @@ The system already knows the selected work orders and the chosen command. The re
 - Dismissing the chooser preserves the existing selection.
 - Pointer and touch contexts may use different presentations while preserving the same task/state semantics.
 - Runtime/component constraints must not silently redefine the frozen interaction model.
+- The runnable prototype contains no reviewer-facing or prototype-explanation content.
 
 ## Source evidence
 
