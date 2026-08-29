@@ -458,7 +458,14 @@ function TemplateSessionPanel({
       />
 
       {session.preview ? (
-        <YStack testID="template-preview" flex={1} bg={template.background} rounded="$4" p="$3" justify="flex-end">
+        <YStack
+          testID="template-preview"
+          flex={1}
+          rounded="$4"
+          p="$3"
+          justify="flex-end"
+          style={{ backgroundColor: template.background }}
+        >
           <Text color="#ffffff" fontWeight="700" fontSize={18}>{template.label}</Text>
           <Text color="#ffffff">{session.instruction || '根据当前内容生成'}</Text>
         </YStack>
@@ -592,12 +599,9 @@ function AcquisitionPanel({
       <YStack flex={1}>{content}</YStack>
 
       {state.selectedMediaIds.length > 0 && !state.templateSession && !overlay ? (
-        <XStack
+        <View
           testID="selection-commit-bar"
-          position="absolute"
-          right={10}
-          bottom={57}
-          gap="$2"
+          style={{ position: 'absolute', right: 10, bottom: 57 }}
         >
           <ProductButton
             testID="commit-selected-media"
@@ -605,7 +609,7 @@ function AcquisitionPanel({
             selected
             onPress={commitSelection}
           />
-        </XStack>
+        </View>
       ) : null}
 
       <XStack height={56} borderTopWidth={1} borderColor="#242629" items="center" justify="space-around">
@@ -689,7 +693,8 @@ function Composer() {
         <TextInput
           testID="body-input"
           value={state.draft.body}
-          onChangeText={(value) => setState((current) => updateBody(current, value))}
+          onChangeText={(value) => setState((current) => updateBody(current, value))
+          }
           placeholder="添加正文"
           placeholderTextColor="#4b4e53"
           multiline
