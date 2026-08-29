@@ -28,11 +28,7 @@ current_state:
 optimization_direction: feature_creation | feature_upgrade | feature_optimization
 ```
 
-Definitions:
-
-- `feature_creation` — introduce a user-facing capability that does not currently exist;
-- `feature_upgrade` — materially expand an existing capability's scope, supported situations, behavior, or user value;
-- `feature_optimization` — preserve substantially the same functional scope while improving interaction, comprehension, efficiency, control, or recovery.
+The product meanings and acceptance boundaries of the three optimization directions are defined only in `../product-spec.md`. This file records the Eval fixture and publishing contract, not a second copy of those definitions.
 
 A case can add personas, constraints, known context, unresolved questions, expected behavior, and forbidden outcomes, but it cannot omit the four fields above.
 
