@@ -23,6 +23,7 @@ hide ownership changes inside automation
 use extra layers without buying new value
 make recommendations compete with the primary task
 accept the first familiar topology under real ambiguity
+leak reviewer or prototype explanation into the user's product surface
 ```
 
 ERROR-level failures must be revised before delivery.
@@ -208,6 +209,24 @@ The structure is justified primarily by a device class, framework default, desig
 
 This skill does not define a full responsive-layout policy; the warning exists to prevent implementation form from outranking semantics.
 
+## AVG-023 — Reviewer context leaks into product prototype — ERROR
+
+### Fail when
+
+A rendered prototype contains visible content whose purpose is to explain the prototype, evaluation, interaction model, implementation, or expected behavior to a reviewer rather than serve the represented end user.
+
+This includes prototype-only headings, legends, annotations, instructions, state-machine descriptions, benchmark labels, platform labels, design rationale, and helper copy added only because the prototype would otherwise be hard to understand.
+
+### Require instead
+
+Keep requirement context, rationale, assertions, implementation notes, and review status on the Eval/review surface. The runnable prototype should stand on authentic product UI alone.
+
+If removing reviewer explanation makes the intended interaction undiscoverable, revisit the interaction design rather than restoring explanatory scaffolding.
+
+### Example
+
+A scheduling prototype displays “Prototype path: choose team → select slot → confirm” above the real scheduling form. That text helps an evaluator but would never appear in the product. Move it to the Eval page and let the actual affordances make the sequence understandable.
+
 ## Review loop
 
 Use this loop after the first draft:
@@ -243,5 +262,7 @@ Do not mechanically report every passing rule to the user. Surface the few rules
 [ ] Feedback timing is justified by intermediate-state value.
 [ ] High-impact actions expose consequence and recovery.
 [ ] Ambiguous structure has not defaulted to the first familiar pattern.
+[ ] Every visible prototype element belongs to the represented end-user product experience.
+[ ] Reviewer/eval/developer explanation stays outside the runnable prototype.
 [ ] ERROR = 0.
 ```
