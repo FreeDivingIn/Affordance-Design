@@ -255,7 +255,7 @@ Cross-platform presentation may adapt after semantics are fixed. Web and Mobile 
 
 For a design task, the default final artifact is a runnable structural prototype when the environment permits artifact/code creation.
 
-The prototype should be visually neutral and expose the important behavior directly:
+The prototype should be visually neutral and expose the important behavior directly through authentic product UI:
 
 - current context and selection;
 - relevant states and transitions;
@@ -265,9 +265,24 @@ The prototype should be visually neutral and expose the important behavior direc
 - proactive intervention timing when relevant;
 - Web / Mobile presentation adaptation when relevant.
 
+The prototype surface is user-only. Every rendered element and every visible string must be something the represented end user would actually see in that product state.
+
+Never render prototype/eval labels, reviewer instructions, design rationale, state-machine descriptions, expected behavior, platform labels, benchmark status, or prototype-only titles/annotations inside the prototype. Keep those in the Eval page, case metadata, or review documents.
+
+A product heading, helper message, status, error, consequence, or recovery action is allowed only if it belongs to the actual represented product experience.
+
 Keep styling deliberately simple. Do not spend the structural-validation phase on brand expression, visual trends, decorative cards, elaborate motion, or production polish.
 
-The prototype is successful when using it can reveal structural mistakes.
+The prototype is successful when using it can reveal structural mistakes without relying on explanatory scaffolding.
+
+When creating an Affordance Design Eval, externalize the requirement before judging the prototype. Every case must provide:
+
+```yaml
+requirement_goal:
+background:
+current_state:
+optimization_direction: feature_creation | feature_upgrade | feature_optimization
+```
 
 ### 18. Operate and review the prototype
 
@@ -285,6 +300,7 @@ user-owned value is protected
 recommendations respect context and active engagement
 recovery behavior is visible
 Web / Mobile adaptations preserve interaction semantics
+no reviewer/developer/prototype-only content appears in the product surface
 ```
 
 If operation exposes a structural failure, revise the interaction model and rebuild. Review has authority to overturn the just-created result.
