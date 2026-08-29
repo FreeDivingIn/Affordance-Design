@@ -5,7 +5,7 @@ on:
     branches:
       - skill/init-affordance-design
     paths:
-      - 'prototypes/assignment/**'
+      - 'prototypes/assignment/runtime/**'
       - '.github/workflows/assignment-prototype.yml'
   workflow_dispatch:
 
