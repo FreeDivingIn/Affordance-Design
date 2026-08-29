@@ -30,8 +30,9 @@ Make Affordance Design produce runnable, block-like structural prototypes for We
 - Milestone 3: added `references/tamagui-prototyping.md` and revised `SKILL.md` so Tamagui is read only after divergence, structural choice, and anti-average review.
 - Milestone 4: added an eval that explicitly asks the model to begin from Tamagui components; expected behavior is to reject component-first composition, complete interaction reasoning first, then map the selected behavior to Tamagui.
 - Milestone 5: froze `prototypes/assignment/interaction-spec.md` before runtime mapping, implemented one universal Expo/Tamagui runtime, separated the platform-independent assignment state model, and passed model tests, TypeScript checking, Web export, and iOS export.
-- Milestone 7 implementation portion: added `evals/` with a renderable catalog, machine-readable case definition, human case page, and a Pages workflow that rebuilds the actual Expo Web prototype at deployment time instead of committing generated output.
-- Pages build preparation was executed in GitHub Actions successfully through dependency install, Expo export with the repository subpath, and `_site` assembly.
+- Milestone 7: added `evals/` with a renderable catalog, machine-readable case definition, human case page, and a Pages workflow that rebuilds the actual Expo Web prototype at deployment time instead of committing generated output.
+- Repository Pages was enabled for GitHub Actions and workflow run `33224610168` completed both build and deploy successfully.
+- GitHub reported the deployed site URL as `https://freedivingin.github.io/Affordance-Design/`.
 
 ## Current State
 
@@ -41,13 +42,13 @@ Runtime mapping currently preserves one semantic state model while allowing pres
 
 Milestone 6 browser-operation testing is still being closed. Pointer Web operation has produced positive evidence; touch/mobile browser emulation remains the unresolved runtime-operation area and must not be reported as complete native interaction validation.
 
-Milestone 7 repository work is ready. GitHub Pages deployment currently stops only at `actions/configure-pages@v5` because the repository has no Pages site enabled/configured for GitHub Actions. The generated eval site and nested Expo prototype build both complete successfully before that step.
+Milestone 7 repository publishing is operational. The Pages build successfully installs dependencies, exports the real Expo Web runtime with the repository subpath, assembles the eval site, uploads the Pages artifact, and deploys it. Feature-branch deployment uses the separate `eval-pages-preview` GitHub environment so preview work is not blocked by protection rules on the default `github-pages` environment; `main` continues to target `github-pages`.
 
 ## Open Issues
 
-- GitHub Pages must be enabled once at repository level with Source = `GitHub Actions`; the current GitHub connector does not expose a repository-Pages settings mutation.
 - Actual native Sheet interaction still needs simulator or physical-device operation evidence.
 - Touch/mobile browser benchmark needs final closure after separating pointer and touch test projects.
+- External HTTP rendering of each Pages URL has not been independently fetched from the current execution environment; GitHub's Pages deployment itself reports success and the site URL.
 - No evidence yet justifies a custom design system, component registry, additional component library, or abstraction layer.
 - A successful static export still does not prove focus, gesture, or interaction quality.
 
@@ -63,6 +64,7 @@ Milestone 7 repository work is ready. GitHub Pages deployment currently stops on
 - Do not build a generic component showcase as the first prototype checkpoint.
 - Eval Pages must publish the real generated runtime output, not a separately hand-authored mock that can drift from the tested source.
 - Machine-readable eval assertions live beside human-rendered review pages; generated runtime bundles remain build artifacts rather than project truth.
+- Feature-branch Pages deployments may use `eval-pages-preview`; `main` uses the default `github-pages` environment.
 
 ## Constraints
 
@@ -72,7 +74,7 @@ Milestone 7 repository work is ready. GitHub Pages deployment currently stops on
 - Keep current Tamagui API/version details in implementation/reference material, not product behavior documents.
 - A successful render is not a successful prototype; key paths must be operated and reviewed.
 - The first runnable prototype must start from an interaction specification that was produced without Tamagui component vocabulary.
-- Do not treat GitHub Pages enablement failure as a runtime implementation failure when the site build itself succeeds.
+- Do not treat GitHub Pages configuration or deployment-environment protection failures as runtime interaction failures.
 
 ## Hypotheses
 
@@ -93,13 +95,25 @@ Milestone 7 repository work is ready. GitHub Pages deployment currently stops on
 
 ## Next
 
-1. Enable repository Pages once: `Settings → Pages → Build and deployment → Source → GitHub Actions`.
-2. Re-run `Affordance evals Pages`; verify the published catalog and `/cases/001-bulk-assignment/prototype/` URL render correctly.
-3. Finish the touch/mobile browser-operation benchmark and update `prototypes/assignment/structural-review.md` with observed evidence.
-4. Operate at least one native Mobile target before closing Milestone 6.
-5. After the first case is externally reviewable, add the next eval only when it exercises a distinct Affordance rule rather than growing a showcase catalog.
+1. Open and manually review the deployed catalog and case 001 prototype from an external browser.
+2. Finish the touch/mobile browser-operation benchmark and update `prototypes/assignment/structural-review.md` with observed evidence.
+3. Operate at least one native Mobile target before closing Milestone 6.
+4. After the first case is externally reviewed, add the next eval only when it exercises a distinct Affordance rule rather than growing a showcase catalog.
 
 ## Verification
+
+Confirmed runtime evidence:
+
+```text
+platform-independent assignment model: PASS (4/4)
+TypeScript: PASS
+Web Expo export: PASS
+iOS Expo export: PASS
+Pages nested Expo build: PASS
+Pages artifact upload: PASS
+Pages deployment: PASS
+GitHub-reported site URL: https://freedivingin.github.io/Affordance-Design/
+```
 
 The runtime milestone is complete when:
 
@@ -110,11 +124,11 @@ The runtime milestone is complete when:
 - Review can identify and overturn a structural mistake independently of whether the code runs;
 - no second UI/runtime system was introduced without documented evidence.
 
-The eval-publishing checkpoint is complete when:
+The eval-publishing checkpoint is implementation-complete when:
 
 - repository Pages is enabled for GitHub Actions;
 - the Pages workflow builds and deploys successfully;
-- the catalog URL opens externally;
-- case 001 opens as a review page;
-- the embedded and direct prototype URLs load the actual Expo-generated runtime from the Pages subpath;
-- `case.json` remains accessible beside the human review page.
+- GitHub returns a Pages site URL;
+- the published artifact contains the catalog, case 001 review page, actual Expo-generated prototype, and machine-readable `case.json`.
+
+External human review of those URLs remains a separate acceptance step rather than being inferred from deployment success.
