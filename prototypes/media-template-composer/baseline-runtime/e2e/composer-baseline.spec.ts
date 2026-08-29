@@ -76,7 +76,9 @@ test('operates template configuration, provisional preview, explicit insertion, 
   await page.getByTestId('template-text-image').click()
 
   await expect(page.getByText('正文内容', { exact: true })).toBeVisible()
-  await expect(page.getByText(body, { exact: false })).toBeVisible()
+  await expect(
+    page.getByTestId('acquisition-panel').getByText(body, { exact: false })
+  ).toBeVisible()
 
   await page.getByTestId('template-instruction').fill('突出主角和关键场景')
   await page.getByTestId('generate-template').click()
@@ -98,7 +100,7 @@ test('keeps adjacent composer utilities operable without leaving the draft conte
   await expect(page.getByTestId('topic-summary')).toContainText('#创作灵感')
 
   await page.getByTestId('emoji-tool').click()
-  await page.locator('[data-testid^="emoji-"]').first().click()
+  await page.getByTestId('emoji-😀').click()
   await page.getByText('完成', { exact: true }).click()
   await expect(page.getByTestId('body-input')).not.toHaveValue('开始写正文')
 
