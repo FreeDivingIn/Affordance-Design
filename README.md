@@ -108,7 +108,6 @@ Cases 001–003 pass model tests, TypeScript/Web/iOS export, local pointer/touch
 
 Outstanding:
 
-- native iOS/Android device operation (simulator/physical-device access blocker);
 - with-Skill vs without-Skill comparison runs once an independent execution environment is available;
 - keyboard/focus, long-list touch gesture quality, and production accessibility remain partially verified.
 

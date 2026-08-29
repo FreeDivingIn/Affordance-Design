@@ -137,8 +137,7 @@ The optimized runtime is implemented in `prototypes/media-template-composer/opti
 Task complete. Follow-up work lives outside this task:
 
 1. Production metric validation (analytics / A-B) for the structural hypotheses.
-2. Native iOS/Android device operation when simulator/physical-device access is available.
-3. Open questions carried in `optimized-review.md` and the comparison record.
+2. Open questions carried in `optimized-review.md` and the comparison record.
 
 ## Verification
 

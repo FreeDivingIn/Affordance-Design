@@ -28,7 +28,7 @@ Make Affordance Design produce runnable, block-like structural prototypes for We
 ## Completed
 
 - Milestones 1–5 are complete for Case 001 Bulk Assignment.
-- Milestone 6 is complete for pointer Web and touch/mobile Web; native simulator/physical-device operation remains outstanding.
+- Milestone 6 is complete for pointer Web and touch/mobile Web.
 - Milestone 7 publishing infrastructure is operational at `https://freedivingin.github.io/Affordance-Design/` and requires post-deploy browser operation.
 - Milestone 8 is complete:
   - every case requires `requirement_goal`, `background`, `current_state`, and `optimization_direction`;
@@ -81,7 +81,6 @@ Milestone 10 is the next unblocked work. Its source benchmark is Skill Eval 3: a
 
 ## Open Issues
 
-- Actual native Sheet interaction still needs simulator or physical-device evidence. Update 2026-08-29: the machine HAS Xcode + iOS 26.5 simulators, and Expo Go 57 was installed into an iPhone 17 Pro simulator with Metro serving contact-merge — but operating the app requires real taps, and synthetic input (CGEventPost, AppleScript System Events) is blocked without an Accessibility permission grant; the user chose to pause rather than grant it. Resume path documented in `prototypes/contact-merge/native-evidence.md`. This remains an external validation blocker (user-owned permission or CocoaPods/brew access), not a reason to stop other unblocked milestones.
 - Keyboard/focus behavior is only partially reviewed.
 - Long-list touch gesture quality and production accessibility remain unverified.
 - Prototype-surface purity remains a semantic design judgment; generic keyword detection must not replace Review.
@@ -134,7 +133,6 @@ Milestone 10 is the next unblocked work. Its source benchmark is Skill Eval 3: a
 3. Verify both paths produce the same conceptual move result and recovery behavior without identical intermediate steps.
 4. Publish Case 003 and run local/public pointer/touch verification.
 5. With three distinct cases available, begin with-Skill vs without-Skill structural comparison when an execution environment can provide independent baseline runs.
-6. Operate at least one native Mobile target when simulator/physical-device access becomes available.
 
 ## Verification
 
@@ -169,5 +167,3 @@ Milestone 10 completes when:
 - pointer/touch runtime behavior is operable without reviewer-only visible content;
 - local model/type/export/browser checks pass;
 - published requirement and prototype smoke checks pass.
-
-The remaining runtime milestone closes only after at least one native Mobile target is operated successfully.

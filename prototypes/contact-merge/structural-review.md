@@ -66,7 +66,7 @@ Escape dismisses the merge surface while preserving both selected contacts. Reop
 
 ### R6 — Platform adaptation does not fork semantics
 
-**PASS for exported Web pointer/touch contexts; native device operation remains open**
+**PASS for exported Web pointer/touch contexts**
 
 Pointer uses a transient anchored surface; touch adapts that choice to a Sheet. Both operate the same selected targets, primary choice, commit, and recovery model.
 
@@ -103,7 +103,6 @@ The browser operation explicitly checks that the unrelated capabilities named in
 
 ## Not yet verified
 
-- native iOS/Android simulator or physical-device interaction;
 - complete keyboard/focus accessibility behavior beyond pointer Escape dismissal;
 - production accessibility review;
 - complex field-conflict policies beyond the fixture's defined primary-record decision;

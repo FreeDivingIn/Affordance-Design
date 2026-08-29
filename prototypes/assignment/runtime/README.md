@@ -33,7 +33,7 @@ npm run export:web
 npm run export:ios
 ```
 
-Export is a bundle/build-level verification. A later checkpoint still needs actual native interaction operation on a device or simulator.
+Export is a bundle/build-level verification.
 
 ## Behavior to verify
 

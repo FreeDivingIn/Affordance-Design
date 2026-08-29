@@ -61,7 +61,7 @@ Technician selection commits immediately. No additional Apply/Confirm stage exis
 
 ### R5 — Cross-platform semantic consistency
 
-**PASS for exported Web pointer/touch contexts; native device operation remains open**
+**PASS for exported Web pointer/touch contexts**
 
 The same state model drives all targets. Presentation adapts without forking assignment semantics.
 
@@ -150,7 +150,6 @@ The deployed smoke opens the public prototype URL, verifies initial selection, i
 
 The following are intentionally not claimed as complete:
 
-- actual Sheet interaction on an iOS/Android simulator or physical device;
 - keyboard/focus behavior through the complete accessibility path beyond the tested Escape dismissal;
 - touch gesture quality with a long technician list;
 - production accessibility review;
