@@ -43,12 +43,12 @@ See `engineering-contract.md` and `.claude/skills/affordance-design/references/t
 ## Structure
 
 ```text
-product-spec.md
-engineering-contract.md
+product-spec.md              # product goal, output levels, acceptance criteria
+engineering-contract.md      # runtime + sequencing constraints
 
 .claude/skills/affordance-design/
-├── SKILL.md
-├── references/
+├── SKILL.md                 # execution entrypoint
+├── references/              # progressively disclosed reasoning knowledge
 │   ├── root-principles.md
 │   ├── interaction-compiler.md
 │   ├── ownership-and-automation.md
@@ -56,20 +56,60 @@ engineering-contract.md
 │   ├── tamagui-prototyping.md
 │   ├── research-basis.md
 │   └── open-questions.md
-└── evals/
+└── evals/                   # in-skill eval definitions
     ├── evals.json
     └── trigger-cases.md
 
-tasks/active/
-└── tamagui-prototype-runtime.md
+evals/                       # published reviewer-facing Eval cases
+├── index.html               # generated catalog entry
+├── validate-cases.mjs       # case schema validation + catalog manifest
+└── cases/<case-id>/
+    ├── case.json            # canonical requirement/expectation fixture
+    ├── README.md
+    └── index.html           # reviewer case page
+
+prototypes/                  # runnable Tamagui structural prototypes
+├── assignment/              # Case 001
+├── contact-merge/           # Case 002
+├── shipment-move/           # Case 003
+└── media-template-composer/ # Case 004 (baseline + optimized runtimes)
+
+tasks/
+├── active/                  # milestone plans in progress
+└── completed/
+
+.github/workflows/           # per-prototype CI + Pages deploy
 ```
 
 `SKILL.md` is intentionally an execution entrypoint. Detailed reasoning and implementation knowledge are progressively disclosed from focused references only when the task needs them.
 
+## Eval site
+
+Published Eval cases are deployed to GitHub Pages:
+
+```text
+https://freedivingin.github.io/Affordance-Design/
+```
+
+Each case keeps requirement brief, expected behavior, runnable prototype, and review evidence as separate layers. Prototypes render only UI the represented end user would actually see; reviewer context lives outside the product runtime (see `evals/README.md`).
+
 ## Current status
 
-Initial skill structure and research split are complete on branch `skill/init-affordance-design`.
+Four structurally distinct runnable Evals are published on branch `skill/init-affordance-design`:
 
-The active milestone is the Tamagui prototype runtime: validate the interaction-first sequencing with benchmark cases, then build the first minimal universal Web/Mobile block prototype.
+| Case | What it tests |
+|---|---|
+| 001 — Bulk Assignment | resolved target context + narrow command execution |
+| 002 — Merge Command Contract | an explicit command must not broaden into capability space |
+| 003 — Move Access Paths | multiple invocation paths to one conceptual action skip already-resolved questions |
+| 004 — Media Template Composer | real-case complex mobile composer: frozen baseline vs Skill-optimized structure |
 
-No cross-library pattern registry, adapter layer, second component system, or production visual design system is planned for the initial runtime phase. Those require concrete evidence from real prototype limitations before reconsideration.
+Cases 001–003 pass model tests, TypeScript/Web/iOS export, local pointer/touch operation, and public post-deploy smoke. Case 004 has both a frozen current-state baseline and an optimized problem-state runtime published; the baseline-vs-optimized structural comparison review is the active work.
+
+Outstanding:
+
+- native iOS/Android device operation (simulator/physical-device access blocker);
+- with-Skill vs without-Skill comparison runs once an independent execution environment is available;
+- keyboard/focus, long-list touch gesture quality, and production accessibility remain partially verified.
+
+No cross-library pattern registry, adapter layer, second component system, or production visual design system is planned for the initial runtime phase. Those require concrete evidence from real prototype limitations before reconsideration (see `engineering-contract.md` re-evaluation conditions).
