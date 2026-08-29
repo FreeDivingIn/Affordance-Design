@@ -9,6 +9,8 @@
     "**/*.tsx"
   ],
   "exclude": [
-    "assignment-model.test.ts"
+    "assignment-model.test.ts",
+    "e2e/**",
+    "playwright.config.ts"
   ]
 }
