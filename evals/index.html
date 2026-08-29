@@ -28,7 +28,6 @@
   </main>
 
   <script>
-    const caseIds = ['001-bulk-assignment']
     const directionLabels = {
       feature_creation: 'Feature creation',
       feature_upgrade: 'Feature upgrade',
@@ -67,7 +66,14 @@
       document.querySelector('#cases').appendChild(section)
     }
 
-    Promise.all(caseIds.map(renderCase)).catch((error) => {
+    async function renderCatalog() {
+      const manifestResponse = await fetch('./cases.json', { cache: 'no-store' })
+      if (!manifestResponse.ok) throw new Error(`cases.json request failed: ${manifestResponse.status}`)
+      const manifest = await manifestResponse.json()
+      await Promise.all(manifest.cases.map(renderCase))
+    }
+
+    renderCatalog().catch((error) => {
       const failure = document.createElement('div')
       failure.className = 'error'
       failure.textContent = `Unable to load eval catalog: ${error.message}`
