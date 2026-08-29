@@ -1,0 +1,41 @@
+{
+  "id": "001-bulk-assignment",
+  "title": "Bulk Assignment",
+  "category": "resolved-context-and-command-contract",
+  "input": {
+    "context": "A field-operations coordinator is triaging a work queue.",
+    "known": [
+      "Several work orders are already selected.",
+      "The user explicitly invoked Assign."
+    ],
+    "unresolved": [
+      "Which technician should receive the selected work orders?"
+    ]
+  },
+  "expected": [
+    "Do not ask the user to select the target work orders again.",
+    "Do not broaden Assign into an unrelated action catalog.",
+    "Resolve only the remaining technician choice.",
+    "Commit technician choice without a redundant confirmation stage.",
+    "Show the resulting assignment and an Undo recovery path.",
+    "Preserve the target selection when the chooser is dismissed.",
+    "Allow presentation to differ by input context without changing task semantics."
+  ],
+  "forbidden": [
+    "component-first redesign",
+    "reopened target selection",
+    "capability catalog after concrete command",
+    "unnecessary confirmation",
+    "platform-specific semantic fork"
+  ],
+  "source": {
+    "interaction_spec": "../../../prototypes/assignment/interaction-spec.md",
+    "runtime_mapping": "../../../prototypes/assignment/runtime-mapping.md",
+    "structural_review": "../../../prototypes/assignment/structural-review.md",
+    "runtime": "../../../prototypes/assignment/runtime/"
+  },
+  "render": {
+    "case_page": "./",
+    "prototype": "./prototype/"
+  }
+}
