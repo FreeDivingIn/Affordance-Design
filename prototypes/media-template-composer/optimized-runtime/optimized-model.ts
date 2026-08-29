@@ -52,7 +52,7 @@ export function createInitialState(): OptimizedState {
       mentions: [],
       attachments: [],
     },
-    flow: null,
+    flow: 'launcher',
     existingSource: 'album',
     selectedMediaIds: [],
     photoPermission: 'limited',
@@ -82,7 +82,11 @@ export function updateBody(state: OptimizedState, body: string): OptimizedState 
 }
 
 export function setBodyFocused(state: OptimizedState, bodyFocused: boolean): OptimizedState {
-  return { ...state, bodyFocused }
+  return {
+    ...state,
+    bodyFocused,
+    flow: bodyFocused ? null : state.flow,
+  }
 }
 
 export function addTopic(state: OptimizedState, topic: string): OptimizedState {
