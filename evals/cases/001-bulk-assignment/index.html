@@ -12,14 +12,16 @@
     header { margin-bottom: 20px; }
     h1 { margin: 10px 0 6px; font-size: 28px; }
     h2 { font-size: 18px; margin: 0 0 10px; }
+    h3 { font-size: 14px; margin: 18px 0 6px; text-transform: uppercase; letter-spacing: .04em; opacity: .7; }
     p, li { line-height: 1.5; }
     .muted { opacity: .68; }
-    .grid { display: grid; grid-template-columns: minmax(260px, 360px) 1fr; gap: 18px; align-items: start; }
+    .grid { display: grid; grid-template-columns: minmax(300px, 390px) 1fr; gap: 18px; align-items: start; }
     .panel { border: 1px solid color-mix(in srgb, CanvasText 20%, transparent); padding: 16px; }
+    .direction { display: inline-block; border: 1px solid color-mix(in srgb, CanvasText 22%, transparent); padding: 4px 8px; font-size: 13px; }
     ul { margin: 0; padding-left: 20px; }
     li + li { margin-top: 8px; }
     iframe { display: block; width: 100%; min-height: 720px; border: 1px solid color-mix(in srgb, CanvasText 20%, transparent); background: white; }
-    .links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 14px; }
+    .links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
     a { color: LinkText; }
     @media (max-width: 820px) {
       main { width: min(100% - 20px, 720px); margin-top: 14px; }
@@ -33,12 +35,26 @@
     <header>
       <a href="../../">← All evals</a>
       <h1>001 — Bulk Assignment</h1>
-      <p class="muted">Structural interaction eval. The embedded prototype is built from the actual Tamagui runtime source during Pages deployment.</p>
+      <p class="muted">Reviewer context and assertions stay on this page; the embedded prototype contains only product UI.</p>
     </header>
 
     <div class="grid">
       <aside class="panel">
-        <h2>Expected behavior</h2>
+        <h2>Requirement brief</h2>
+
+        <h3>Goal</h3>
+        <p>Allow a field-operations coordinator to reassign multiple already-selected work orders to one technician quickly, while keeping the result clear and recoverable.</p>
+
+        <h3>Background</h3>
+        <p>Field-operations coordinators triage a shared work queue throughout the day. They often select several work orders that need the same technician and then perform a batch assignment while remaining in the queue context.</p>
+
+        <h3>Current state</h3>
+        <p>The queue already supports multi-selection and Assign, but the current flow re-establishes target context and adds decision/confirmation steps even though the selected work orders and Assign intent are already known.</p>
+
+        <h3>Optimization direction</h3>
+        <span class="direction">Feature optimization</span>
+
+        <h3>Expected behavior</h3>
         <ul>
           <li>Reuse the already-selected target set.</li>
           <li>Keep Assign a concrete command, not a capability catalog.</li>
@@ -47,6 +63,7 @@
           <li>Show consequence and Undo.</li>
           <li>Preserve selection on dismissal.</li>
           <li>Adapt presentation without changing semantics.</li>
+          <li>Keep all reviewer/prototype explanations outside the product surface.</li>
         </ul>
         <div class="links">
           <a href="./prototype/" target="_blank" rel="noreferrer">Open prototype only</a>
