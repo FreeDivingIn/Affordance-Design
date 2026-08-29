@@ -40,7 +40,7 @@ function AssignmentChooser({
   onAssign: (technician: string) => void
 }) {
   return (
-    <YStack gap="$3" minWidth={260}>
+    <YStack gap="$3" minW={260}>
       <YStack gap="$1">
         <Text fontSize="$6" fontWeight="700">
           Assign {selectedCount} work orders
@@ -52,11 +52,7 @@ function AssignmentChooser({
 
       <YStack gap="$2">
         {technicians.map((technician) => (
-          <Button
-            key={technician}
-            justifyContent="flex-start"
-            onPress={() => onAssign(technician)}
-          >
+          <Button key={technician} justify="flex-start" onPress={() => onAssign(technician)}>
             {technician}
           </Button>
         ))}
@@ -98,7 +94,7 @@ function AssignmentPrototype() {
   }
 
   return (
-    <YStack flex={1} backgroundColor="$background" padding="$4" gap="$4">
+    <YStack flex={1} bg="$background" p="$4" gap="$4">
       <YStack gap="$1">
         <Text fontSize="$8" fontWeight="700">
           Work queue
@@ -112,13 +108,13 @@ function AssignmentPrototype() {
         <XStack
           borderWidth={1}
           borderColor="$borderColor"
-          padding="$3"
+          p="$3"
           gap="$3"
-          alignItems="center"
-          justifyContent="space-between"
+          items="center"
+          justify="space-between"
           flexWrap="wrap"
         >
-          <Text flexShrink={1}>
+          <Text shrink={1}>
             Assigned {lastCommit.workOrderIds.length} work orders to {lastCommit.technician}.
           </Text>
           <Button size="$3" onPress={undo}>
@@ -130,9 +126,9 @@ function AssignmentPrototype() {
       <XStack
         borderWidth={1}
         borderColor="$borderColor"
-        padding="$3"
-        alignItems="center"
-        justifyContent="space-between"
+        p="$3"
+        items="center"
+        justify="space-between"
         gap="$3"
         flexWrap="wrap"
       >
@@ -152,10 +148,10 @@ function AssignmentPrototype() {
             opacity={canAssign ? 1 : 0.5}
             borderWidth={1}
             borderColor="$borderColor"
-            borderRadius="$4"
-            paddingHorizontal="$4"
-            paddingVertical="$2"
-            alignItems="center"
+            rounded="$4"
+            px="$4"
+            py="$2"
+            items="center"
           >
             <Text fontWeight="600">Assign</Text>
           </Popover.Trigger>
@@ -164,7 +160,7 @@ function AssignmentPrototype() {
             <Sheet modal dismissOnSnapToBottom snapPoints={[55]}>
               <Sheet.Overlay />
               <Sheet.Handle />
-              <Sheet.Frame padding="$4">
+              <Sheet.Frame p="$4">
                 <Sheet.ScrollView>
                   <Adapt.Contents />
                 </Sheet.ScrollView>
@@ -175,8 +171,8 @@ function AssignmentPrototype() {
           <Popover.Content
             borderWidth={1}
             borderColor="$borderColor"
-            backgroundColor="$background"
-            padding="$3"
+            bg="$background"
+            p="$3"
             width={320}
           >
             <AssignmentChooser selectedCount={selectedIds.length} onAssign={assign} />
@@ -185,23 +181,23 @@ function AssignmentPrototype() {
       </XStack>
 
       <ScrollView flex={1}>
-        <YStack gap="$2" paddingBottom="$8">
+        <YStack gap="$2" pb="$8">
           {workOrders.map((workOrder) => {
             const selected = selectedSet.has(workOrder.id)
             return (
               <Button
                 key={workOrder.id}
                 height="auto"
-                padding="$3"
+                p="$3"
                 borderWidth={2}
                 borderColor={selected ? '$color10' : '$borderColor'}
-                backgroundColor="$background"
+                bg="$background"
                 onPress={() => setSelectedIds((current) => toggleSelection(current, workOrder.id))}
               >
-                <XStack flex={1} gap="$3" alignItems="center" justifyContent="space-between">
-                  <XStack gap="$3" alignItems="center" flexShrink={1}>
+                <XStack flex={1} gap="$3" items="center" justify="space-between">
+                  <XStack gap="$3" items="center" shrink={1}>
                     <Text width={28}>{selected ? '[x]' : '[ ]'}</Text>
-                    <YStack flexShrink={1} alignItems="flex-start">
+                    <YStack shrink={1} items="flex-start">
                       <Text fontWeight="600">{workOrder.id}</Text>
                       <Text>{workOrder.title}</Text>
                     </YStack>
