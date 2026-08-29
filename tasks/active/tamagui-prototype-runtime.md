@@ -6,106 +6,107 @@ Make Affordance Design produce runnable, block-like structural prototypes for We
 
 ## Relevant Context
 
-- The Skill's highest-value output is a runnable structural prototype, not a polished visual design.
-- The interaction model must be decided before any Tamagui component lookup or mapping.
-- Early multi-tool/component-library merging is explicitly out of scope.
-- Tamagui 2 is the selected initial runtime for React Native and React Web.
-- The runtime is an implementation layer; it must not become the source of information architecture or interaction concepts.
-- Every Eval case must be independently reviewable without hidden chat context.
+- The Skill's default high-value artifact is a runnable structural prototype, not polished UI design.
+- Interaction semantics must be designed before Tamagui component lookup or mapping.
+- Tamagui is the single initial runtime; early multi-library abstraction is out of scope.
+- Every Eval case must be independently reviewable without hidden conversation context.
 - Eval/reviewer information and user-facing prototype content are separate surfaces.
 
 ## Milestones
 
-1. Deeply understand Tamagui's current cross-platform runtime, adaptation model, component mechanics, configuration, and AI-oriented tooling from official sources.
-2. Establish the product output contract and engineering sequencing constraints.
-3. Update the Skill so divergence and structural review occur before Tamagui mapping.
-4. Add prototype-focused evals that catch component-first convergence.
-5. Build the first minimal runnable block prototype scaffold with Tamagui from a pre-selected interaction model.
-6. Run a cross-platform interaction benchmark and review whether Tamagui implementation changes the selected interaction model.
-7. Externalize runnable eval cases and publish them through GitHub Pages for human review.
-8. Formalize the Eval requirement contract and user-only prototype-surface boundary.
+1. Understand the selected Tamagui runtime deeply enough for Web/Mobile structural prototyping.
+2. Establish product output and engineering sequencing contracts.
+3. Make the Skill diverge and review structurally before Tamagui mapping.
+4. Add evals that catch component-first convergence.
+5. Build the first runnable prototype from a pre-selected interaction model.
+6. Run cross-platform interaction benchmarks and verify runtime mapping does not redefine semantics.
+7. Publish runnable Eval cases through GitHub Pages for human review.
+8. Formalize complete Eval requirement context and the user-only prototype-surface boundary.
 
 ## Completed
 
-- Milestones 1–5 are complete for the first representative assignment case.
-- Milestone 6 is complete for pointer Web and touch/mobile Web semantics; native simulator/physical-device operation remains the outstanding native validation.
-- Milestone 7 publishing infrastructure is operational at `https://freedivingin.github.io/Affordance-Design/`, with post-deploy browser operation required after Pages deployment.
-- Milestone 8 product and engineering contracts are established:
+- Milestones 1–5 are complete for Case 001 Bulk Assignment.
+- Milestone 6 is complete for pointer Web and touch/mobile Web; native simulator/physical-device operation remains outstanding.
+- Milestone 7 publishing infrastructure is operational at `https://freedivingin.github.io/Affordance-Design/` and requires post-deploy browser operation.
+- Milestone 8 is complete:
   - every case requires `requirement_goal`, `background`, `current_state`, and `optimization_direction`;
-  - `optimization_direction` is constrained to `feature_creation`, `feature_upgrade`, or `feature_optimization`;
-  - `case.json` is the canonical Eval fixture for requirement and expectation facts;
-  - reviewer pages render requirement data from the canonical fixture rather than duplicating it;
-  - the published catalog is generated from validated case directories instead of manually duplicating case metadata;
-  - runnable prototypes contain only UI the represented end user would actually see;
+  - `optimization_direction` accepts only `feature_creation`, `feature_upgrade`, or `feature_optimization`; their product meanings live only in `product-spec.md`;
+  - `case.json` is the canonical requirement/expectation fixture;
+  - reviewer pages and the Eval catalog derive case facts from canonical fixtures rather than duplicating requirement prose;
+  - the published catalog manifest is generated from validated case directories;
+  - runnable prototypes render only UI the represented end user would actually see;
   - reviewer/developer/prototype explanations remain outside the runtime;
-  - known reviewer-copy leakage is guarded by local and deployed browser regression checks.
-- Case 001 was revised to remove prototype-only explanatory content and to include the complete requirement brief as `feature_optimization`.
-- `AVG-023 — Reviewer context leaks into product prototype — ERROR` was added to the anti-average review.
-- A deterministic Eval fixture validator was added because the mandatory requirement fields and direction enum are stable mechanical predicates.
+  - `AVG-023 — Reviewer context leaks into product prototype — ERROR` enforces this boundary in Skill review;
+  - known Case 001 reviewer-copy leaks are covered by local and deployed browser regression checks.
+- Case 001 was revised to remove prototype-only explanatory content and records its complete product brief as `feature_optimization`.
+- Final Pages run `33226663317` passed build, deploy, and public browser smoke after the Eval-contract refresh.
 
 ## Current State
 
-The first representative interaction remains frozen independently of Tamagui and is implemented as a block-like universal prototype.
+The first interaction remains frozen independently of Tamagui and is implemented as a universal block prototype.
 
-Browser operation validates the same assignment semantics in pointer and touch contexts. The earlier touch blank-screen defect is closed after adding the missing Tamagui animation driver; no upstream interaction decision changed.
-
-The Eval layer now has a stronger information boundary:
+The Eval information boundary is now:
 
 ```text
+product-spec.md
+→ meanings of feature_creation / feature_upgrade / feature_optimization
+
 case.json
-→ canonical requirement + expectation fixture
-→ reviewer page / generated catalog
+→ canonical requirement + expected/forbidden behavior for one Eval case
+→ reviewer case page + generated catalog
 
 interaction spec + runtime
 → runnable product prototype
 → user-visible product UI only
 ```
 
-The current Pages workflow validates every case requirement fixture before publishing and generates the catalog manifest from validated case directories. The latest deployment must still complete its full build → deploy → public browser smoke cycle before this checkpoint is considered externally refreshed.
+The latest public validation confirms:
+
+- canonical case fixtures pass required-field validation;
+- the catalog manifest is generated from validated cases;
+- the public catalog renders the manifest case set;
+- the Case page renders goal, background, current state, and optimization direction from `case.json`;
+- the public desktop-pointer and touch-mobile prototypes remain operable;
+- the known reviewer-only strings do not appear in the product prototype;
+- no browser runtime errors were observed by the smoke test.
 
 ## Open Issues
 
-- Actual native Sheet interaction still needs simulator or physical-device operation evidence.
-- Keyboard/focus behavior is not fully reviewed beyond the tested pointer Escape dismissal.
+- Actual native Sheet interaction still needs simulator or physical-device evidence.
+- Keyboard/focus behavior is only partially reviewed; pointer Escape dismissal is covered, not the full accessibility path.
 - Long-list touch gesture quality and production accessibility remain unverified.
-- Prototype-surface purity cannot be reduced to a generic keyword detector; future cases still require semantic review of whether each visible element belongs to the represented end-user product.
-- No evidence justifies a custom design system, component registry, additional component library, or abstraction layer.
+- Prototype-surface purity is a semantic design judgment; generic keyword detection must not replace Review of whether each visible element genuinely belongs to the end-user product.
+- No evidence justifies adding another component/runtime system or abstraction layer.
 
 ## Decisions
 
-- Tamagui remains the only component/runtime system during the initial prototype phase.
-- Do not create a cross-library pattern registry or adapter layer during this milestone.
+- Tamagui remains the only initial prototype runtime.
 - Do not browse or enumerate Tamagui components during design divergence.
 - Component names are implementation vocabulary, not interaction-design vocabulary.
-- The default artifact is a low-visual-fidelity, high-behavior-fidelity block prototype.
-- Web and Mobile may use different presentations after semantics are fixed; task/scope/state/recovery semantics remain shared unless context justifies a different model.
-- Prefer composition/configuration changes over changing a validated interaction model merely to fit runtime constraints.
-- Every Eval case must include a complete requirement brief: goal, background, current state, and one of the three optimization directions.
-- `case.json` is the single case-fixture source of requirement and expected-behavior facts; reviewer HTML should render from it.
+- Web and Mobile presentations may differ after semantics are fixed; task/scope/state/recovery semantics remain shared unless context justifies a different model.
+- Every Eval case starts with a complete product brief: goal, background, current state, and one of the three optimization directions.
+- `product-spec.md` owns the meanings of the optimization directions.
+- `case.json` is the single case-level source of requirement and expected-behavior facts.
 - Reviewer context and product runtime are separate artifacts.
 - Every visible prototype element/string must be justifiable as real user-facing product UI for the represented state.
-- Non-rendered instrumentation such as test IDs is allowed when it does not alter visible product behavior.
-- Static export or successful Pages deployment alone is insufficient verification. A deployed runnable eval must pass browser operation with runtime errors treated as failures.
+- Non-rendered verification instrumentation is allowed when it does not alter visible product behavior.
+- Build/export/deploy success is insufficient; public prototypes must also pass browser operation.
 
 ## Constraints
 
-- Do not let Tamagui demo aesthetics influence structural choice.
-- Do not add visual-system polish before structural validation.
-- Do not add another UI library without evidence meeting the re-evaluation conditions in `engineering-contract.md`.
-- Keep Tamagui API/version details in implementation/reference material, not product behavior documents.
-- A successful render is not a successful prototype; key paths must be operated and reviewed.
-- The first runnable prototype must start from an interaction specification produced without Tamagui component vocabulary.
-- Runtime failures must first be diagnosed at the implementation/configuration boundary; do not redesign upstream semantics merely to fit a stock component.
-- Do not add prototype-only labels, headings, legends, annotations, interaction explanations, platform labels, or evaluator instructions to make a design easier to review.
-- Do not duplicate case requirement facts across README, reviewer HTML, and machine fixture.
+- Do not let Tamagui/component availability generate the interaction concept.
+- Do not add visual polish before structural validation.
+- Do not add another UI library without evidence meeting `engineering-contract.md` re-evaluation conditions.
+- Runtime failures should first change implementation/configuration, not a still-valid upstream interaction model.
+- Do not add prototype-only labels, headings, legends, annotations, interaction explanations, platform labels, or evaluator instructions.
+- Do not duplicate case requirement facts across README, reviewer HTML, catalog, and machine fixture.
 
 ## Hypotheses
 
-- Tamagui's primitives plus `Adapt` remain sufficient for the first structural prototypes without a custom design system.
-- Loading Tamagui knowledge only after structural choice reduces component-led convergence compared with component-first prompting.
-- A neutral product UI without evaluator scaffolding makes weak affordances easier to detect because the prototype must stand on its own.
-- Complete case briefs make Eval judgments more transferable and less dependent on hidden conversation context.
-- Renderable Eval pages plus post-deploy operation catch failures that Markdown review, compilation, and static export cannot.
+- Tamagui primitives plus `Adapt` remain sufficient for the first structural prototypes without a custom design system.
+- Loading runtime/component knowledge only after structural choice reduces component-led convergence.
+- Removing evaluator scaffolding makes weak affordances easier to detect because the prototype must stand on authentic product UI alone.
+- Complete requirement briefs improve Eval transferability and reduce dependence on hidden conversation context.
 
 ## Deferred
 
@@ -113,20 +114,18 @@ The current Pages workflow validates every case requirement fixture before publi
 - Additional headless/component libraries.
 - MCP/component discovery integration.
 - Production visual design system.
-- Compiler/performance optimization beyond what the first prototype requires.
-- Packaging or publishing a reusable prototype runtime package.
-- Generic automatic classification of whether arbitrary visible prototype copy is user-facing; this remains a semantic review problem.
+- Reusable prototype-runtime packaging.
+- Generic automatic classification of arbitrary prototype copy as user-facing vs reviewer-facing.
 
 ## Next
 
-1. Close the current Pages run with fixture validation, generated catalog, deployment, and public browser smoke all passing.
-2. Operate at least one native Mobile target before claiming native runtime completion.
-3. Add the next Eval only when it exercises a distinct Affordance rule and starts with the complete requirement contract.
-4. Use the first two or three distinct cases to compare with-Skill vs without-Skill structural decisions.
+1. Operate at least one native Mobile target before claiming native runtime completion.
+2. Add the next Eval only when it exercises a distinct Affordance rule and begins with the complete requirement contract.
+3. After two or three distinct cases exist, compare with-Skill vs without-Skill structural decisions.
 
 ## Verification
 
-Confirmed before the latest Eval-contract refresh:
+Current verified checkpoint:
 
 ```text
 platform-independent assignment model: PASS (4/4)
@@ -136,17 +135,14 @@ iOS Expo export: PASS
 local desktop-pointer interaction: PASS
 local touch-mobile interaction: PASS
 known prototype-copy leakage regression: PASS
-Pages deployment: PASS
-deployed desktop-pointer operation: PASS
-deployed touch-mobile operation: PASS
+mandatory Eval requirement fixture validation: PASS
+catalog manifest generation: PASS
+Pages build: PASS
+Pages deploy: PASS
+public catalog/manifest consistency: PASS
+public Case requirement rendering: PASS
+public desktop-pointer prototype operation: PASS
+public touch-mobile prototype operation: PASS
 ```
 
-The Eval-contract refresh is complete when:
-
-- every `evals/cases/*/case.json` passes mandatory requirement-field validation;
-- the catalog manifest is generated from validated cases;
-- the Case page renders all four requirement fields from its canonical fixture;
-- the published prototype contains no known reviewer-only copy;
-- the public pointer and touch prototypes remain operable after deployment.
-
-The runtime milestone is fully complete when the validated prototype also works on at least one native Mobile target.
+The remaining runtime milestone closes only after at least one native Mobile target is operated successfully.
