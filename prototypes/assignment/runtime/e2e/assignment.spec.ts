@@ -7,6 +7,12 @@ async function expectInitialSelection(page: Page) {
   await expect(page.getByTestId('work-order-WO-1051')).toContainText('Unassigned')
 }
 
+async function expectPrototypeSurfacePurity(page: Page) {
+  await expect(page.getByText('Structural prototype:', { exact: false })).toHaveCount(0)
+  await expect(page.getByText('Choose one technician.', { exact: false })).toHaveCount(0)
+  await expect(page.getByText('Work queue', { exact: true })).toHaveCount(0)
+}
+
 async function commitAndUndo(page: Page) {
   await page.getByTestId('technician-avery-chen').click()
 
@@ -43,18 +49,21 @@ test.describe('pointer Web presentation', () => {
   test('keeps Assign local, commits directly, and recovers with Undo', async ({ page }) => {
     await page.goto('/')
     await expectInitialSelection(page)
+    await expectPrototypeSurfacePurity(page)
 
     await page.getByTestId('assign-trigger').click()
 
     await expect(page.getByTestId('assignment-popover')).toBeVisible()
     await expect(page.getByTestId('assignment-sheet')).toBeHidden()
     await expect(page.getByText('Assign 3 work orders')).toBeVisible()
+    await expectPrototypeSurfacePurity(page)
 
     await commitAndUndo(page)
   })
 
   test('dismissal preserves the already-selected target set', async ({ page }) => {
     await page.goto('/')
+    await expectPrototypeSurfacePurity(page)
     await page.getByTestId('assign-trigger').click()
     await expect(page.getByTestId('assignment-popover')).toBeVisible()
 
@@ -76,11 +85,13 @@ test.describe('touch/mobile presentation', () => {
   test('adapts presentation to a Sheet without changing assignment semantics', async ({ page }) => {
     await page.goto('/')
     await expectInitialSelection(page)
+    await expectPrototypeSurfacePurity(page)
 
     await page.getByTestId('assign-trigger').click()
 
     await expect(page.getByTestId('assignment-sheet')).toBeVisible()
     await expect(page.getByText('Assign 3 work orders')).toBeVisible()
+    await expectPrototypeSurfacePurity(page)
 
     await commitAndUndo(page)
   })
