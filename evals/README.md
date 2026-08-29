@@ -9,6 +9,14 @@ Each case keeps four layers separate:
 3. **Rendered prototype** — a runnable artifact built from the actual prototype source, not a hand-authored mock substitute.
 4. **Review evidence** — source interaction spec, runtime mapping, benchmark result, and structural review.
 
+## Canonical case fixture
+
+`cases/<case-id>/case.json` is the single source of requirement and expected-behavior facts for a published Eval case.
+
+Reviewer HTML reads those fields from `case.json`; do not copy the same requirement prose into README or hand-maintain it in the catalog.
+
+`evals/validate-cases.mjs` validates every case directory and generates the published catalog manifest during the Pages build. The manifest is generated output, not project truth.
+
 ## Required requirement brief
 
 Every case must explicitly provide:
@@ -32,7 +40,9 @@ A case can add personas, constraints, known context, unresolved questions, expec
 
 ```text
 evals/
+├── README.md
 ├── index.html
+├── validate-cases.mjs
 └── cases/
     └── <case-id>/
         ├── README.md
@@ -42,7 +52,7 @@ evals/
 
 The deployed site is assembled by `.github/workflows/evals-pages.yml`.
 
-Runtime bundles are generated during deployment and copied under each case's `prototype/` path. Generated build output is not committed as project truth.
+Runtime bundles are generated during deployment and copied under each case's `prototype/` path. Generated build output and the generated catalog manifest are not committed as project truth.
 
 ## Prototype boundary
 
@@ -66,6 +76,7 @@ Every visible element and string in the prototype must be defensible as somethin
 - Do not use the rendered page as the source of interaction design decisions.
 - Freeze the interaction specification before component/runtime mapping.
 - Keep test assertions about observable behavior, not visual polish.
+- Fail publication when the mandatory requirement schema is incomplete or the optimization direction is outside the three allowed values.
 - A successful build does not automatically mean a case passes structural review.
-- Deployment is not accepted until the public prototype is opened and operated in browser smoke tests.
+- Deployment is not accepted until the public catalog, requirement page, and prototype are opened and checked by browser smoke tests.
 - Add a new case only when it tests a distinct design failure mode or decision boundary.
