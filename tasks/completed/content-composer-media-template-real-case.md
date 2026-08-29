@@ -46,10 +46,19 @@ Use a real, high-complexity mobile content-composer case to test Affordance Desi
   - contextual visual suggestion is gated to a modeled natural break and supplies direct shortcuts that skip already-resolved questions;
   - broad template exploration remains available; direct draft illustration no longer requires entering the broad template catalog;
   - optimized interaction specification is frozen in `optimized-interaction-spec.md`.
+- Milestone 6 runtime verification complete:
+  - optimized structural review ACCEPT (`optimized-review.md`, GitHub Actions run `33229997607`);
+  - optimized runtime published at Case 004 `prototype/` with deployed smoke passing; baseline retained at `baseline/`.
+- Milestone 7 complete:
+  - both published artifacts operated first-hand on 2026-08-29 (baseline source-taxonomy first decision; optimized problem-state entry, context-bound generation, natural-break suggestion with direct shortcuts, provisional candidates with explicit insert);
+  - structural comparison recorded in `evals/cases/004-media-template-composer/comparison.md` across discoverability, context preservation, layer value, task interruption, template-flow completion, and direct-media protection;
+  - metric-validation boundary recorded: structural differences are hypotheses, no image-attach or template-use uplift is claimed;
+  - reviewer page now embeds both artifacts side by side and links the comparison; case README updated from "Future" to published state;
+  - Pages CI run `33240288483` green (build / deploy / smoke incl. Cases 001–003 regression); public URLs verified 200 and operable.
 
 ## Current State
 
-Milestone 6 runtime verification is active.
+All seven milestones are complete. The task is closed.
 
 The frozen baseline remains independently reviewable and must not be overwritten by the optimized artifact.
 
@@ -125,12 +134,11 @@ The optimized runtime is implemented in `prototypes/media-template-composer/opti
 
 ## Next
 
-1. Finish optimized runtime CI and fix only implementation/test failures that do not invalidate the frozen structural model.
-2. Review optimized behavior against anti-average lints and baseline capability preservation.
-3. Publish optimized runtime separately at Case 004 `prototype/` while retaining baseline at `baseline/`.
-4. Update the Case 004 reviewer page to compare baseline and Skill output without putting reviewer text into either product surface.
-5. Run public post-deploy smoke across both Case 004 artifacts plus regressions for Cases 001–003.
-6. Record baseline vs optimized structural comparison and metric-validation boundary.
+Task complete. Follow-up work lives outside this task:
+
+1. Production metric validation (analytics / A-B) for the structural hypotheses.
+2. Native iOS/Android device operation when simulator/physical-device access is available.
+3. Open questions carried in `optimized-review.md` and the comparison record.
 
 ## Verification
 
@@ -147,6 +155,20 @@ baseline mobile-touch operation: PASS (4/4)
 public Case 004 requirement rendering: PASS
 public Case 004 baseline operation: PASS
 Cases 001–003 public regression smoke: PASS
+```
+
+Milestone 7 checkpoint:
+
+```text
+first-hand operation of both deployed artifacts: PASS (2026-08-29)
+structural comparison record published: PASS
+reviewer page side-by-side comparison: PASS
+case README published state: PASS
+metric-validation boundary recorded: PASS
+eval case validation: PASS (4/4)
+Pages CI run 33240288483 (build/deploy/smoke): PASS
+public comparison.md / baseline / prototype URLs: PASS (200)
+Cases 001–003 regression smoke: PASS (in CI smoke job)
 ```
 
 Milestone 6 completes when the optimized runtime verifies:
