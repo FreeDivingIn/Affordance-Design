@@ -11,6 +11,7 @@ on:
       - 'prototypes/contact-merge/runtime/**'
       - 'prototypes/shipment-move/runtime/**'
       - 'prototypes/media-template-composer/baseline-runtime/**'
+      - 'prototypes/media-template-composer/optimized-runtime/**'
       - '.github/workflows/evals-pages.yml'
   workflow_dispatch:
 
@@ -26,7 +27,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 40
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -41,6 +42,7 @@ jobs:
             prototypes/contact-merge/runtime/package.json
             prototypes/shipment-move/runtime/package.json
             prototypes/media-template-composer/baseline-runtime/package.json
+            prototypes/media-template-composer/optimized-runtime/package.json
 
       - name: Validate eval requirement briefs and build manifest
         run: node evals/validate-cases.mjs --manifest _site/cases.json
@@ -85,6 +87,16 @@ jobs:
           EXPO_BASE_URL: /Affordance-Design/cases/004-media-template-composer/baseline
         run: npm run export:web
 
+      - name: Install case 004 optimized dependencies
+        working-directory: prototypes/media-template-composer/optimized-runtime
+        run: npm install --no-audit --no-fund
+
+      - name: Build case 004 Skill output for Pages subpath
+        working-directory: prototypes/media-template-composer/optimized-runtime
+        env:
+          EXPO_BASE_URL: /Affordance-Design/cases/004-media-template-composer/prototype
+        run: npm run export:web
+
       - name: Assemble eval site
         run: |
           cp evals/index.html _site/index.html
@@ -97,6 +109,9 @@ jobs:
             if [ -f "$case_dir/source-observations.md" ]; then
               cp "$case_dir/source-observations.md" "_site/cases/$case_id/source-observations.md"
             fi
+            if [ -f "$case_dir/comparison.md" ]; then
+              cp "$case_dir/comparison.md" "_site/cases/$case_id/comparison.md"
+            fi
           done
           mkdir -p _site/cases/001-bulk-assignment/prototype
           cp -R prototypes/assignment/runtime/dist-web/. _site/cases/001-bulk-assignment/prototype/
@@ -106,6 +121,8 @@ jobs:
           cp -R prototypes/shipment-move/runtime/dist-web/. _site/cases/003-move-access-paths/prototype/
           mkdir -p _site/cases/004-media-template-composer/baseline
           cp -R prototypes/media-template-composer/baseline-runtime/dist-web/. _site/cases/004-media-template-composer/baseline/
+          mkdir -p _site/cases/004-media-template-composer/prototype
+          cp -R prototypes/media-template-composer/optimized-runtime/dist-web/. _site/cases/004-media-template-composer/prototype/
           touch _site/.nojekyll
 
       - name: Configure GitHub Pages
@@ -129,7 +146,7 @@ jobs:
 
   smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
     needs: deploy
     steps:
       - name: Checkout
@@ -145,6 +162,7 @@ jobs:
             prototypes/contact-merge/runtime/package.json
             prototypes/shipment-move/runtime/package.json
             prototypes/media-template-composer/baseline-runtime/package.json
+            prototypes/media-template-composer/optimized-runtime/package.json
 
       - name: Install case 001 prototype dependencies
         working-directory: prototypes/assignment/runtime
@@ -160,6 +178,10 @@ jobs:
 
       - name: Install case 004 baseline dependencies
         working-directory: prototypes/media-template-composer/baseline-runtime
+        run: npm install --no-audit --no-fund
+
+      - name: Install case 004 optimized dependencies
+        working-directory: prototypes/media-template-composer/optimized-runtime
         run: npm install --no-audit --no-fund
 
       - name: Install Chromium
@@ -188,4 +210,10 @@ jobs:
         working-directory: prototypes/media-template-composer/baseline-runtime
         env:
           BASELINE_URL: https://freedivingin.github.io/Affordance-Design/cases/004-media-template-composer/baseline/
+        run: node e2e/pages-smoke.mjs
+
+      - name: Verify deployed case 004 Skill output
+        working-directory: prototypes/media-template-composer/optimized-runtime
+        env:
+          PROTOTYPE_URL: https://freedivingin.github.io/Affordance-Design/cases/004-media-template-composer/prototype/
         run: node e2e/pages-smoke.mjs
