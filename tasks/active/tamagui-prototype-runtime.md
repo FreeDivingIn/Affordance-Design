@@ -22,7 +22,8 @@ Make Affordance Design produce runnable, block-like structural prototypes for We
 6. Run cross-platform interaction benchmarks and verify runtime mapping does not redefine semantics.
 7. Publish runnable Eval cases through GitHub Pages for human review.
 8. Formalize complete Eval requirement context and the user-only prototype-surface boundary.
-9. Add a second runnable Eval that exercises a distinct Affordance rule: an explicit command must not expand into an unrelated capability catalog.
+9. Add a second runnable Eval for the explicit-command affordance contract.
+10. Add a third runnable Eval for multiple access paths: different invocation paths may skip questions already answered by context while preserving one conceptual action and compatible resulting state.
 
 ## Completed
 
@@ -37,16 +38,31 @@ Make Affordance Design produce runnable, block-like structural prototypes for We
   - the published catalog manifest is generated from validated case directories;
   - runnable prototypes render only UI the represented end user would actually see;
   - reviewer/developer/prototype explanations remain outside the runtime;
-  - `AVG-023 — Reviewer context leaks into product prototype — ERROR` enforces this boundary in Skill review;
-  - known Case 001 reviewer-copy leaks are covered by local and deployed browser regression checks.
-- Case 001 was revised to remove prototype-only explanatory content and records its complete product brief as `feature_optimization`.
-- Final Pages run `33226663317` passed build, deploy, and public browser smoke after the Eval-contract refresh.
+  - `AVG-023 — Reviewer context leaks into product prototype — ERROR` enforces this boundary in Skill review.
+- Milestone 9 is complete as Case 002 `Merge Command Contract`:
+  - complete canonical requirement fixture classified as `feature_optimization`;
+  - semantic interaction specification frozen before Tamagui mapping;
+  - explicit Merge proceeds only to the unresolved primary-contact decision;
+  - Export, Add tags, Find duplicates, and AI cleanup do not appear after Merge;
+  - selecting the primary record commits directly and exposes Undo;
+  - dismissing the pointer surface preserves both selected contacts;
+  - pointer and touch/mobile Web preserve one merge state model;
+  - platform-independent tests, TypeScript, Web export, iOS export, and local pointer/touch browser operation passed in workflow run `33227904340`;
+  - Pages build, deploy, Case 001 regression smoke, and public Case 002 pointer/touch smoke passed in workflow run `33227940423`.
 
 ## Current State
 
-The first interaction remains frozen independently of Tamagui and is implemented as a universal block prototype.
+Two structurally distinct runnable Evals are now public:
 
-The Eval information boundary is now:
+```text
+Case 001 — Bulk Assignment
+  tests resolved target context + narrow command execution
+
+Case 002 — Merge Command Contract
+  tests whether an explicit command is improperly broadened into capability space
+```
+
+The Eval information boundary remains:
 
 ```text
 product-spec.md
@@ -61,25 +77,15 @@ interaction spec + runtime
 → user-visible product UI only
 ```
 
-The latest public validation confirms:
-
-- canonical case fixtures pass required-field validation;
-- the catalog manifest is generated from validated cases;
-- the public catalog renders the manifest case set;
-- the Case page renders goal, background, current state, and optimization direction from `case.json`;
-- the public desktop-pointer and touch-mobile prototypes remain operable;
-- the known reviewer-only strings do not appear in the product prototype;
-- no browser runtime errors were observed by the smoke test.
-
-Milestone 9 is now the active unblocked work. Its source benchmark is Skill Eval 2: a contact-management app where invoking the explicit `Merge contacts` command incorrectly opens a broad menu containing unrelated actions. The new runnable case must preserve the command's narrow semantics and proceed only through genuinely unresolved merge-specific decisions.
+Milestone 10 is the next unblocked work. Its source benchmark is Skill Eval 3: a logistics app supports `Move` through a generic action command and through dragging a shipment onto a destination depot. The important distinction is that drag already supplies the destination, so forcing both paths through the same destination picker would re-ask resolved context.
 
 ## Open Issues
 
 - Actual native Sheet interaction still needs simulator or physical-device evidence. The current connected environment cannot operate an iOS/Android simulator or physical device, so this remains an external validation blocker rather than a reason to stop other unblocked milestones.
-- Keyboard/focus behavior is only partially reviewed; pointer Escape dismissal is covered, not the full accessibility path.
+- Keyboard/focus behavior is only partially reviewed.
 - Long-list touch gesture quality and production accessibility remain unverified.
-- Prototype-surface purity is a semantic design judgment; generic keyword detection must not replace Review of whether each visible element genuinely belongs to the end-user product.
-- No evidence justifies adding another component/runtime system or abstraction layer.
+- Prototype-surface purity remains a semantic design judgment; generic keyword detection must not replace Review.
+- No evidence justifies adding another component/runtime system or a shared prototype framework yet.
 
 ## Decisions
 
@@ -87,14 +93,12 @@ Milestone 9 is now the active unblocked work. Its source benchmark is Skill Eval
 - Do not browse or enumerate Tamagui components during design divergence.
 - Component names are implementation vocabulary, not interaction-design vocabulary.
 - Web and Mobile presentations may differ after semantics are fixed; task/scope/state/recovery semantics remain shared unless context justifies a different model.
-- Every Eval case starts with a complete product brief: goal, background, current state, and one of the three optimization directions.
-- `product-spec.md` owns the meanings of the optimization directions.
-- `case.json` is the single case-level source of requirement and expected-behavior facts.
+- Every Eval case starts with a complete product brief and uses `case.json` as the single case-level source of requirement/expected-behavior facts.
 - Reviewer context and product runtime are separate artifacts.
 - Every visible prototype element/string must be justifiable as real user-facing product UI for the represented state.
-- Non-rendered verification instrumentation is allowed when it does not alter visible product behavior.
 - Build/export/deploy success is insufficient; public prototypes must also pass browser operation.
-- Milestone 9 must begin from a contact-merge interaction specification that contains no Tamagui component vocabulary. Runtime mapping happens only after that specification and structural review criteria are fixed.
+- Different access paths to one conceptual action are allowed to have different step counts when one path has already supplied information the other path still lacks.
+- Access-path consistency means compatible intent, target/effect semantics, and resulting state; it does not require identical intermediate UI.
 
 ## Constraints
 
@@ -104,7 +108,7 @@ Milestone 9 is now the active unblocked work. Its source benchmark is Skill Eval
 - Runtime failures should first change implementation/configuration, not a still-valid upstream interaction model.
 - Do not add prototype-only labels, headings, legends, annotations, interaction explanations, platform labels, or evaluator instructions.
 - Do not duplicate case requirement facts across README, reviewer HTML, catalog, and machine fixture.
-- Case 002 must exercise command-affordance semantics rather than becoming another generic component showcase.
+- Case 003 must model two access paths to the same Move action without forcing identical steps or allowing incompatible outcomes.
 
 ## Hypotheses
 
@@ -112,7 +116,7 @@ Milestone 9 is now the active unblocked work. Its source benchmark is Skill Eval
 - Loading runtime/component knowledge only after structural choice reduces component-led convergence.
 - Removing evaluator scaffolding makes weak affordances easier to detect because the prototype must stand on authentic product UI alone.
 - Complete requirement briefs improve Eval transferability and reduce dependence on hidden conversation context.
-- A second structurally distinct case will reveal whether the current runtime organization can support multiple Eval prototypes without premature abstraction.
+- Three structurally distinct Evals will be sufficient to begin a meaningful with-Skill vs without-Skill comparison without turning the suite into a component showcase.
 
 ## Deferred
 
@@ -125,43 +129,45 @@ Milestone 9 is now the active unblocked work. Its source benchmark is Skill Eval
 
 ## Next
 
-1. Define Case 002's complete requirement fixture and freeze its merge-specific interaction model before implementation.
-2. Implement and test a runnable Web/touch structural prototype using Tamagui only after the interaction model is fixed.
-3. Publish Case 002 through the existing Eval catalog and Pages pipeline, then operate the public prototype.
-4. Operate at least one native Mobile target when an environment with simulator/physical-device access becomes available.
-5. After two or three distinct cases exist, compare with-Skill vs without-Skill structural decisions.
+1. Define Case 003's complete logistics requirement fixture and freeze the access-path semantic model before implementation.
+2. Implement both Move paths so the generic command asks for destination while drag-to-depot uses the already-supplied destination directly.
+3. Verify both paths produce the same conceptual move result and recovery behavior without identical intermediate steps.
+4. Publish Case 003 and run local/public pointer/touch verification.
+5. With three distinct cases available, begin with-Skill vs without-Skill structural comparison when an execution environment can provide independent baseline runs.
+6. Operate at least one native Mobile target when simulator/physical-device access becomes available.
 
 ## Verification
 
-Current verified checkpoint before Milestone 9:
+Current checkpoint:
 
 ```text
-platform-independent assignment model: PASS (4/4)
-TypeScript: PASS
-Web Expo export: PASS
-iOS Expo export: PASS
-local desktop-pointer interaction: PASS
-local touch/mobile interaction: PASS
-known prototype-copy leakage regression: PASS
-mandatory Eval requirement fixture validation: PASS
+Case 001 assignment model tests: PASS (4/4)
+Case 001 TypeScript/Web/iOS export: PASS
+Case 001 local pointer/touch operation: PASS
+Case 001 public pointer/touch smoke: PASS
+
+Case 002 merge model tests: PASS (4/4)
+Case 002 TypeScript/Web/iOS export: PASS
+Case 002 local pointer/touch operation: PASS
+Case 002 public requirement rendering: PASS
+Case 002 public pointer/touch smoke: PASS
+
+mandatory Eval requirement validation: PASS
 catalog manifest generation: PASS
-Pages build: PASS
-Pages deploy: PASS
-public catalog/manifest consistency: PASS
-public Case requirement rendering: PASS
-public desktop-pointer prototype operation: PASS
-public touch-mobile prototype operation: PASS
+Pages build/deploy: PASS
+Case 001 regression after Case 002 publication: PASS
 ```
 
-Milestone 9 completes when:
+Milestone 10 completes when:
 
-- Case 002 has a complete canonical requirement fixture;
-- its interaction specification is frozen before runtime mapping and contains no Tamagui component vocabulary;
-- the runnable prototype keeps `Merge contacts` semantically narrow and exposes only merge-specific unresolved decisions;
-- unrelated capabilities do not appear after invoking Merge;
-- pointer and touch variants preserve the same merge semantics;
-- prototype-visible content is authentic product UI only;
-- automated state-model/browser checks pass;
-- the published Case 002 requirement page and public prototype pass post-deploy smoke verification.
+- Case 003 has a complete canonical requirement fixture;
+- its interaction specification is frozen before runtime mapping;
+- generic `Move` and drag-to-depot remain one conceptual action with compatible effect/result;
+- the generic path asks for destination because it is unresolved;
+- the drag path does not ask for destination again because the drop target supplied it;
+- recovery behavior is consistent across both paths;
+- pointer/touch runtime behavior is operable without reviewer-only visible content;
+- local model/type/export/browser checks pass;
+- published requirement and prototype smoke checks pass.
 
 The remaining runtime milestone closes only after at least one native Mobile target is operated successfully.
