@@ -3,6 +3,7 @@ import { chromium } from '@playwright/test'
 const prototypeUrl =
   process.env.PROTOTYPE_URL ||
   'https://freedivingin.github.io/Affordance-Design/cases/001-bulk-assignment/prototype/'
+const caseUrl = prototypeUrl.replace(/prototype\/?$/, '')
 
 const scenarios = [
   {
@@ -34,6 +35,48 @@ const forbiddenVisibleCopy = [
 const browser = await chromium.launch()
 
 try {
+  const reviewContext = await browser.newContext({ viewport: { width: 1280, height: 800 } })
+  const reviewPage = await reviewContext.newPage()
+  const reviewErrors = []
+
+  reviewPage.on('pageerror', (error) => reviewErrors.push(error.stack || error.message))
+  reviewPage.on('console', (message) => {
+    if (message.type() === 'error') reviewErrors.push(`console: ${message.text()}`)
+  })
+
+  const reviewResponse = await reviewPage.goto(caseUrl, {
+    waitUntil: 'networkidle',
+    timeout: 30_000,
+  })
+
+  if (!reviewResponse?.ok()) {
+    throw new Error(`Eval case request failed: ${reviewResponse?.status()} ${caseUrl}`)
+  }
+
+  await reviewPage.locator('#requirement-panel[data-ready="true"]').waitFor({ state: 'visible' })
+
+  for (const selector of [
+    '#requirement-goal',
+    '#requirement-background',
+    '#requirement-current-state',
+    '#requirement-direction',
+  ]) {
+    const text = (await reviewPage.locator(selector).textContent())?.trim()
+    if (!text) throw new Error(`Eval case missing rendered requirement field: ${selector}`)
+  }
+
+  const direction = (await reviewPage.locator('#requirement-direction').textContent())?.trim()
+  if (direction !== 'Feature optimization') {
+    throw new Error(`Unexpected optimization direction: ${direction ?? '<missing>'}`)
+  }
+
+  if (reviewErrors.length > 0) {
+    throw new Error(`Eval case browser errors:\n${reviewErrors.join('\n\n')}`)
+  }
+
+  console.log('[PASS] eval case: canonical requirement brief rendered completely')
+  await reviewContext.close()
+
   for (const scenario of scenarios) {
     const context = await browser.newContext(scenario.context)
     const page = await context.newPage()
