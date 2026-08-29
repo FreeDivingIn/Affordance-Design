@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "Affordance Assignment Prototype",
+    "slug": "affordance-assignment-prototype",
+    "version": "0.0.1",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
