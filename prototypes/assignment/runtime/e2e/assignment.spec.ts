@@ -24,7 +24,22 @@ async function commitAndUndo(page: Page) {
   await expectInitialSelection(page)
 }
 
+test.beforeEach(async ({ page }, testInfo) => {
+  page.on('pageerror', (error) => {
+    console.error(`[${testInfo.project.name}] page error: ${error.message}`)
+  })
+  page.on('console', (message) => {
+    if (message.type() === 'error') {
+      console.error(`[${testInfo.project.name}] console error: ${message.text()}`)
+    }
+  })
+})
+
 test.describe('pointer Web presentation', () => {
+  test.beforeEach(async ({}, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop-pointer', 'Pointer behavior belongs to desktop project')
+  })
+
   test('keeps Assign local, commits directly, and recovers with Undo', async ({ page }) => {
     await page.goto('/')
     await expectInitialSelection(page)
@@ -54,6 +69,10 @@ test.describe('pointer Web presentation', () => {
 })
 
 test.describe('touch/mobile presentation', () => {
+  test.beforeEach(async ({}, testInfo) => {
+    test.skip(testInfo.project.name !== 'touch-mobile', 'Touch behavior belongs to touch project')
+  })
+
   test('adapts presentation to a Sheet without changing assignment semantics', async ({ page }) => {
     await page.goto('/')
     await expectInitialSelection(page)
