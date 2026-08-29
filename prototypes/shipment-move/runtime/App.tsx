@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { PanResponder, Platform } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import {
@@ -188,6 +188,7 @@ function ShipmentMovePrototype() {
   const [moveOpenFor, setMoveOpenFor] = useState<string | null>(null)
   const [lastCommit, setLastCommit] = useState<MoveCommit | null>(null)
   const [draggingShipmentId, setDraggingShipmentId] = useState<string | null>(null)
+  const depotRefs = useRef<Record<string, any>>({})
 
   const commitMove = (shipmentId: string, destinationDepotId: string) => {
     const current = shipments.find((shipment) => shipment.id === shipmentId)
@@ -206,17 +207,26 @@ function ShipmentMovePrototype() {
   }
 
   const resolvePointerDrop = (shipmentId: string, x: number, y: number) => {
-    if (Platform.OS !== 'web' || typeof document === 'undefined') return
+    if (Platform.OS !== 'web') return
 
-    const target = document.elementFromPoint(x, y)
-    const depotElement = target?.closest?.('[data-testid^="depot-"]')
-    const testId = depotElement?.getAttribute('data-testid')
-    if (!testId) return
+    for (const depot of depots) {
+      const node = depotRefs.current[depot.id]
+      if (!node?.measureInWindow) continue
 
-    const destinationDepotId = testId.replace(/^depot-/, '')
-    if (!depots.some((depot) => depot.id === destinationDepotId)) return
+      node.measureInWindow(
+        (left: number, top: number, width: number, height: number) => {
+          const isInside =
+            x >= left &&
+            x <= left + width &&
+            y >= top &&
+            y <= top + height
 
-    commitMove(shipmentId, destinationDepotId)
+          if (isInside) {
+            commitMove(shipmentId, depot.id)
+          }
+        }
+      )
+    }
   }
 
   return (
@@ -263,6 +273,9 @@ function ShipmentMovePrototype() {
             {depots.map((depot) => (
               <YStack
                 key={depot.id}
+                ref={(node) => {
+                  depotRefs.current[depot.id] = node
+                }}
                 testID={`depot-${depot.id}`}
                 borderWidth={draggingShipmentId ? 2 : 1}
                 borderColor={draggingShipmentId ? '$color10' : '$borderColor'}
