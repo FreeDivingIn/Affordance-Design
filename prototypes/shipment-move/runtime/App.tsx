@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState } from 'react'
-import { PanResponder, Platform } from 'react-native'
+import { useState } from 'react'
+import { Platform } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import {
   Adapt,
@@ -14,6 +14,7 @@ import {
   YStack,
 } from 'tamagui'
 
+import { PointerDragHandle } from './PointerDragHandle'
 import {
   moveShipment,
   undoMove,
@@ -87,22 +88,6 @@ function ShipmentRow({
   const media = useMedia()
   const pointerDragAvailable = Platform.OS === 'web' && !media.touchable
 
-  const panResponder = useMemo(
-    () =>
-      PanResponder.create({
-        onStartShouldSetPanResponder: () => false,
-        onMoveShouldSetPanResponder: (_, gesture) =>
-          pointerDragAvailable && Math.abs(gesture.dx) + Math.abs(gesture.dy) > 4,
-        onPanResponderGrant: () => onDragStateChange(shipment.id),
-        onPanResponderRelease: (_, gesture) => {
-          onDropAt(shipment.id, gesture.moveX, gesture.moveY)
-          onDragStateChange(null)
-        },
-        onPanResponderTerminate: () => onDragStateChange(null),
-      }),
-    [onDragStateChange, onDropAt, pointerDragAvailable, shipment.id]
-  )
-
   return (
     <XStack
       testID={`shipment-${shipment.id}`}
@@ -116,17 +101,11 @@ function ShipmentRow({
     >
       <XStack gap="$3" items="center" shrink={1}>
         {pointerDragAvailable ? (
-          <YStack
-            testID={`drag-handle-${shipment.id}`}
-            px="$2"
-            py="$3"
-            borderWidth={1}
-            borderColor="$borderColor"
-            rounded="$3"
-            {...panResponder.panHandlers}
-          >
-            <Text fontWeight="700">⋮⋮</Text>
-          </YStack>
+          <PointerDragHandle
+            shipmentId={shipment.id}
+            onDropAt={onDropAt}
+            onDragStateChange={onDragStateChange}
+          />
         ) : null}
 
         <YStack shrink={1}>
@@ -188,7 +167,6 @@ function ShipmentMovePrototype() {
   const [moveOpenFor, setMoveOpenFor] = useState<string | null>(null)
   const [lastCommit, setLastCommit] = useState<MoveCommit | null>(null)
   const [draggingShipmentId, setDraggingShipmentId] = useState<string | null>(null)
-  const depotRefs = useRef<Record<string, any>>({})
 
   const commitMove = (shipmentId: string, destinationDepotId: string) => {
     const current = shipments.find((shipment) => shipment.id === shipmentId)
@@ -207,26 +185,17 @@ function ShipmentMovePrototype() {
   }
 
   const resolvePointerDrop = (shipmentId: string, x: number, y: number) => {
-    if (Platform.OS !== 'web') return
+    if (Platform.OS !== 'web' || typeof document === 'undefined') return
 
-    for (const depot of depots) {
-      const node = depotRefs.current[depot.id]
-      if (!node?.measureInWindow) continue
+    const target = document.elementFromPoint(x, y)
+    const depotElement = target?.closest?.('[data-testid^="depot-"]')
+    const testId = depotElement?.getAttribute('data-testid')
+    if (!testId) return
 
-      node.measureInWindow(
-        (left: number, top: number, width: number, height: number) => {
-          const isInside =
-            x >= left &&
-            x <= left + width &&
-            y >= top &&
-            y <= top + height
+    const destinationDepotId = testId.replace(/^depot-/, '')
+    if (!depots.some((depot) => depot.id === destinationDepotId)) return
 
-          if (isInside) {
-            commitMove(shipmentId, depot.id)
-          }
-        }
-      )
-    }
+    commitMove(shipmentId, destinationDepotId)
   }
 
   return (
@@ -273,9 +242,6 @@ function ShipmentMovePrototype() {
             {depots.map((depot) => (
               <YStack
                 key={depot.id}
-                ref={(node) => {
-                  depotRefs.current[depot.id] = node
-                }}
                 testID={`depot-${depot.id}`}
                 borderWidth={draggingShipmentId ? 2 : 1}
                 borderColor={draggingShipmentId ? '$color10' : '$borderColor'}
