@@ -33,6 +33,10 @@ const initialWorkOrders: WorkOrder[] = [
   { id: 'WO-1060', title: 'Verify backup generator', assignee: 'Unassigned' },
 ]
 
+function technicianTestId(technician: string) {
+  return `technician-${technician.toLowerCase().replaceAll(' ', '-')}`
+}
+
 function AssignmentChooser({
   selectedCount,
   onAssign,
@@ -53,7 +57,12 @@ function AssignmentChooser({
 
       <YStack gap="$2">
         {technicians.map((technician) => (
-          <Button key={technician} justify="flex-start" onPress={() => onAssign(technician)}>
+          <Button
+            key={technician}
+            testID={technicianTestId(technician)}
+            justify="flex-start"
+            onPress={() => onAssign(technician)}
+          >
             {technician}
           </Button>
         ))}
@@ -107,6 +116,7 @@ function AssignmentPrototype() {
 
       {lastCommit ? (
         <XStack
+          testID="assignment-feedback"
           borderWidth={1}
           borderColor="$borderColor"
           p="$3"
@@ -118,7 +128,7 @@ function AssignmentPrototype() {
           <Text shrink={1}>
             Assigned {lastCommit.workOrderIds.length} work orders to {lastCommit.technician}.
           </Text>
-          <Button size="$3" onPress={undo}>
+          <Button testID="undo-assignment" size="$3" onPress={undo}>
             Undo
           </Button>
         </XStack>
@@ -133,7 +143,9 @@ function AssignmentPrototype() {
         gap="$3"
         flexWrap="wrap"
       >
-        <Text fontWeight="600">{selectedIds.length} selected</Text>
+        <Text testID="selection-count" fontWeight="600">
+          {selectedIds.length} selected
+        </Text>
 
         <Popover
           open={assignmentOpen}
@@ -143,6 +155,7 @@ function AssignmentPrototype() {
           allowFlip
         >
           <Popover.Trigger
+            testID="assign-trigger"
             accessibilityRole="button"
             accessibilityState={{ disabled: !canAssign }}
             pointerEvents={canAssign ? 'auto' : 'none'}
@@ -161,7 +174,7 @@ function AssignmentPrototype() {
             <Sheet modal dismissOnSnapToBottom snapPoints={[55]}>
               <Sheet.Overlay />
               <Sheet.Handle />
-              <Sheet.Frame p="$4">
+              <Sheet.Frame testID="assignment-sheet" p="$4">
                 <Sheet.ScrollView>
                   <Adapt.Contents />
                 </Sheet.ScrollView>
@@ -170,6 +183,7 @@ function AssignmentPrototype() {
           </Adapt>
 
           <Popover.Content
+            testID="assignment-popover"
             borderWidth={1}
             borderColor="$borderColor"
             bg="$background"
@@ -188,6 +202,7 @@ function AssignmentPrototype() {
             return (
               <Button
                 key={workOrder.id}
+                testID={`work-order-${workOrder.id}`}
                 height="auto"
                 p="$3"
                 borderWidth={2}
