@@ -25,6 +25,12 @@ const scenarios = [
   },
 ]
 
+const forbiddenVisibleCopy = [
+  'Structural prototype:',
+  'Choose one technician.',
+  'Work queue',
+]
+
 const browser = await chromium.launch()
 
 try {
@@ -63,6 +69,13 @@ try {
       )
     }
 
+    for (const copy of forbiddenVisibleCopy) {
+      const count = await page.getByText(copy, { exact: false }).count()
+      if (count > 0) {
+        throw new Error(`[${scenario.name}] prototype-only visible copy leaked: ${copy}`)
+      }
+    }
+
     await page.getByTestId('assign-trigger').click()
     await page.getByTestId(scenario.expectedSurface).waitFor({ state: 'visible' })
     await page.getByTestId('technician-avery-chen').click()
@@ -74,7 +87,9 @@ try {
       )
     }
 
-    console.log(`[PASS] ${scenario.name}: loaded, assigned, and rendered feedback`)
+    console.log(
+      `[PASS] ${scenario.name}: loaded, stayed product-only, assigned, and rendered feedback`
+    )
     await context.close()
   }
 } finally {
