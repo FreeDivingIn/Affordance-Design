@@ -8,6 +8,9 @@
     "newArchEnabled": true,
     "web": {
       "bundler": "metro"
+    },
+    "ios": {
+      "bundleIdentifier": "com.anonymous.affordance-contact-merge-prototype"
     }
   }
 }

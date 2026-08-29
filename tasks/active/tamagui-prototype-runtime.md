@@ -81,7 +81,7 @@ Milestone 10 is the next unblocked work. Its source benchmark is Skill Eval 3: a
 
 ## Open Issues
 
-- Actual native Sheet interaction still needs simulator or physical-device evidence. The current connected environment cannot operate an iOS/Android simulator or physical device, so this remains an external validation blocker rather than a reason to stop other unblocked milestones.
+- Actual native Sheet interaction still needs simulator or physical-device evidence. Update 2026-08-29: the machine HAS Xcode + iOS 26.5 simulators, and Expo Go 57 was installed into an iPhone 17 Pro simulator with Metro serving contact-merge — but operating the app requires real taps, and synthetic input (CGEventPost, AppleScript System Events) is blocked without an Accessibility permission grant; the user chose to pause rather than grant it. Resume path documented in `prototypes/contact-merge/native-evidence.md`. This remains an external validation blocker (user-owned permission or CocoaPods/brew access), not a reason to stop other unblocked milestones.
 - Keyboard/focus behavior is only partially reviewed.
 - Long-list touch gesture quality and production accessibility remain unverified.
 - Prototype-surface purity remains a semantic design judgment; generic keyword detection must not replace Review.
