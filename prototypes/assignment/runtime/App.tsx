@@ -12,20 +12,15 @@ import {
   YStack,
 } from 'tamagui'
 
+import {
+  assignWorkOrders,
+  toggleSelection,
+  undoAssignment,
+  type AssignmentCommit,
+  type AssignmentSnapshot,
+  type WorkOrder,
+} from './assignment-model'
 import { tamaguiConfig } from './tamagui.config'
-
-type WorkOrder = {
-  id: string
-  title: string
-  assignee: string
-}
-
-type AssignmentSnapshot = Record<string, string>
-
-type CommitState = {
-  technician: string
-  workOrderIds: string[]
-} | null
 
 const technicians = ['Avery Chen', 'Jordan Lee', 'Morgan Patel', 'Sam Rivera']
 
@@ -79,48 +74,24 @@ function AssignmentPrototype() {
   ])
   const [assignmentOpen, setAssignmentOpen] = useState(false)
   const [previousAssignment, setPreviousAssignment] = useState<AssignmentSnapshot | null>(null)
-  const [lastCommit, setLastCommit] = useState<CommitState>(null)
+  const [lastCommit, setLastCommit] = useState<AssignmentCommit | null>(null)
 
   const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds])
-
-  const toggleSelection = (id: string) => {
-    setSelectedIds((current) =>
-      current.includes(id) ? current.filter((item) => item !== id) : [...current, id]
-    )
-  }
 
   const assign = (technician: string) => {
     if (selectedIds.length === 0) return
 
-    const snapshot: AssignmentSnapshot = {}
-    for (const workOrder of workOrders) {
-      if (selectedSet.has(workOrder.id)) {
-        snapshot[workOrder.id] = workOrder.assignee
-      }
-    }
-
-    const affectedIds = [...selectedIds]
-
-    setPreviousAssignment(snapshot)
-    setWorkOrders((current) =>
-      current.map((workOrder) =>
-        selectedSet.has(workOrder.id) ? { ...workOrder, assignee: technician } : workOrder
-      )
-    )
-    setLastCommit({ technician, workOrderIds: affectedIds })
+    const result = assignWorkOrders(workOrders, selectedIds, technician)
+    setPreviousAssignment(result.snapshot)
+    setWorkOrders(result.workOrders)
+    setLastCommit(result.commit)
     setAssignmentOpen(false)
   }
 
   const undo = () => {
     if (!previousAssignment || !lastCommit) return
 
-    setWorkOrders((current) =>
-      current.map((workOrder) =>
-        workOrder.id in previousAssignment
-          ? { ...workOrder, assignee: previousAssignment[workOrder.id] }
-          : workOrder
-      )
-    )
+    setWorkOrders((current) => undoAssignment(current, previousAssignment))
     setPreviousAssignment(null)
     setLastCommit(null)
   }
@@ -213,7 +184,7 @@ function AssignmentPrototype() {
                 borderWidth={2}
                 borderColor={selected ? '$color10' : '$borderColor'}
                 backgroundColor="$background"
-                onPress={() => toggleSelection(workOrder.id)}
+                onPress={() => setSelectedIds((current) => toggleSelection(current, workOrder.id))}
               >
                 <XStack flex={1} gap="$3" alignItems="center" justifyContent="space-between">
                   <XStack gap="$3" alignItems="center" flexShrink={1}>
