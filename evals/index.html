@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Affordance Design Evals</title>
+  <style>
+    :root { color-scheme: light dark; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 32px 20px; background: Canvas; color: CanvasText; }
+    main { max-width: 900px; margin: 0 auto; }
+    h1 { margin: 0 0 8px; font-size: 28px; }
+    p { line-height: 1.55; }
+    .muted { opacity: .68; }
+    .case { border: 1px solid color-mix(in srgb, CanvasText 22%, transparent); padding: 18px; margin-top: 28px; }
+    .case h2 { margin: 0 0 8px; font-size: 20px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+    .tag { border: 1px solid color-mix(in srgb, CanvasText 18%, transparent); padding: 4px 8px; font-size: 13px; }
+    a { color: LinkText; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Affordance Design Evals</h1>
+    <p class="muted">Renderable structural-evaluation cases. Interaction specifications are frozen before runtime/component mapping; prototypes are generated from the real runnable source during deployment.</p>
+
+    <section class="case">
+      <h2>001 — Bulk Assignment</h2>
+      <p>Tests reuse of resolved selection context, concrete-command semantics, immediate reversible commit, and presentation adaptation without semantic drift.</p>
+      <div class="tags">
+        <span class="tag">resolved context</span>
+        <span class="tag">command contract</span>
+        <span class="tag">Web + touch</span>
+        <span class="tag">Undo</span>
+      </div>
+      <a href="./cases/001-bulk-assignment/">Open case and runnable prototype →</a>
+    </section>
+  </main>
+</body>
+</html>
