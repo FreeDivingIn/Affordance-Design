@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "Affordance Contact Merge Prototype",
+    "slug": "affordance-contact-merge-prototype",
+    "version": "0.0.1",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
