@@ -4,6 +4,7 @@ const prototypeUrl =
   process.env.PROTOTYPE_URL ||
   'https://freedivingin.github.io/Affordance-Design/cases/001-bulk-assignment/prototype/'
 const caseUrl = prototypeUrl.replace(/prototype\/?$/, '')
+const catalogUrl = new URL('../../../', prototypeUrl).toString()
 
 const scenarios = [
   {
@@ -44,6 +45,31 @@ try {
     if (message.type() === 'error') reviewErrors.push(`console: ${message.text()}`)
   })
 
+  const catalogResponse = await reviewPage.goto(catalogUrl, {
+    waitUntil: 'networkidle',
+    timeout: 30_000,
+  })
+
+  if (!catalogResponse?.ok()) {
+    throw new Error(`Eval catalog request failed: ${catalogResponse?.status()} ${catalogUrl}`)
+  }
+
+  const manifestResponse = await reviewPage.request.get(new URL('cases.json', catalogUrl).toString())
+  if (!manifestResponse.ok()) {
+    throw new Error(`Eval manifest request failed: ${manifestResponse.status()}`)
+  }
+  const manifest = await manifestResponse.json()
+  const renderedCases = await reviewPage.locator('.case').count()
+  if (renderedCases !== manifest.cases.length) {
+    throw new Error(
+      `Eval catalog rendered ${renderedCases} case(s), manifest contains ${manifest.cases.length}`
+    )
+  }
+  if (!manifest.cases.includes('001-bulk-assignment')) {
+    throw new Error('Eval manifest is missing 001-bulk-assignment')
+  }
+  console.log('[PASS] eval catalog: generated manifest and rendered case list agree')
+
   const reviewResponse = await reviewPage.goto(caseUrl, {
     waitUntil: 'networkidle',
     timeout: 30_000,
@@ -71,7 +97,7 @@ try {
   }
 
   if (reviewErrors.length > 0) {
-    throw new Error(`Eval case browser errors:\n${reviewErrors.join('\n\n')}`)
+    throw new Error(`Eval reviewer-surface browser errors:\n${reviewErrors.join('\n\n')}`)
   }
 
   console.log('[PASS] eval case: canonical requirement brief rendered completely')
