@@ -8,6 +8,7 @@ on:
     paths:
       - 'evals/**'
       - 'prototypes/assignment/runtime/**'
+      - 'prototypes/contact-merge/runtime/**'
       - '.github/workflows/evals-pages.yml'
   workflow_dispatch:
 
@@ -23,7 +24,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -33,12 +34,14 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: prototypes/assignment/runtime/package.json
+          cache-dependency-path: |
+            prototypes/assignment/runtime/package.json
+            prototypes/contact-merge/runtime/package.json
 
       - name: Validate eval requirement briefs and build manifest
         run: node evals/validate-cases.mjs --manifest _site/cases.json
 
-      - name: Install prototype dependencies
+      - name: Install case 001 prototype dependencies
         working-directory: prototypes/assignment/runtime
         run: npm install --no-audit --no-fund
 
@@ -46,6 +49,16 @@ jobs:
         working-directory: prototypes/assignment/runtime
         env:
           EXPO_BASE_URL: /Affordance-Design/cases/001-bulk-assignment/prototype
+        run: npm run export:web
+
+      - name: Install case 002 prototype dependencies
+        working-directory: prototypes/contact-merge/runtime
+        run: npm install --no-audit --no-fund
+
+      - name: Build case 002 prototype for Pages subpath
+        working-directory: prototypes/contact-merge/runtime
+        env:
+          EXPO_BASE_URL: /Affordance-Design/cases/002-merge-command-contract/prototype
         run: npm run export:web
 
       - name: Assemble eval site
@@ -60,6 +73,8 @@ jobs:
           done
           mkdir -p _site/cases/001-bulk-assignment/prototype
           cp -R prototypes/assignment/runtime/dist-web/. _site/cases/001-bulk-assignment/prototype/
+          mkdir -p _site/cases/002-merge-command-contract/prototype
+          cp -R prototypes/contact-merge/runtime/dist-web/. _site/cases/002-merge-command-contract/prototype/
           touch _site/.nojekyll
 
       - name: Configure GitHub Pages
@@ -83,7 +98,7 @@ jobs:
 
   smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     needs: deploy
     steps:
       - name: Checkout
@@ -94,18 +109,30 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: prototypes/assignment/runtime/package.json
+          cache-dependency-path: |
+            prototypes/assignment/runtime/package.json
+            prototypes/contact-merge/runtime/package.json
 
-      - name: Install prototype dependencies
+      - name: Install case 001 prototype dependencies
         working-directory: prototypes/assignment/runtime
+        run: npm install --no-audit --no-fund
+
+      - name: Install case 002 prototype dependencies
+        working-directory: prototypes/contact-merge/runtime
         run: npm install --no-audit --no-fund
 
       - name: Install Chromium
         working-directory: prototypes/assignment/runtime
         run: npx playwright install --with-deps chromium
 
-      - name: Verify deployed requirement brief and product prototype
+      - name: Verify deployed case 001 requirement and prototype
         working-directory: prototypes/assignment/runtime
         env:
           PROTOTYPE_URL: https://freedivingin.github.io/Affordance-Design/cases/001-bulk-assignment/prototype/
+        run: node e2e/pages-smoke.mjs
+
+      - name: Verify deployed case 002 requirement and prototype
+        working-directory: prototypes/contact-merge/runtime
+        env:
+          PROTOTYPE_URL: https://freedivingin.github.io/Affordance-Design/cases/002-merge-command-contract/prototype/
         run: node e2e/pages-smoke.mjs
