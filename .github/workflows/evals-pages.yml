@@ -35,6 +35,9 @@ jobs:
           cache: npm
           cache-dependency-path: prototypes/assignment/runtime/package.json
 
+      - name: Validate eval requirement briefs
+        run: node evals/validate-cases.mjs
+
       - name: Install prototype dependencies
         working-directory: prototypes/assignment/runtime
         run: npm install --no-audit --no-fund
