@@ -31,26 +31,28 @@ Make Affordance Design produce runnable, block-like structural prototypes for We
 - Milestone 4: added an eval that explicitly asks the model to begin from Tamagui components; expected behavior is to reject component-first composition, complete interaction reasoning first, then map the selected behavior to Tamagui.
 - Milestone 5: froze `prototypes/assignment/interaction-spec.md` before runtime mapping, implemented one universal Expo/Tamagui runtime, separated the platform-independent assignment state model, and passed model tests, TypeScript checking, Web export, and iOS export.
 - Milestone 7: added `evals/` with a renderable catalog, machine-readable case definition, human case page, and a Pages workflow that rebuilds the actual Expo Web prototype at deployment time instead of committing generated output.
-- Repository Pages was enabled for GitHub Actions and workflow run `33224610168` completed both build and deploy successfully.
-- GitHub reported the deployed site URL as `https://freedivingin.github.io/Affordance-Design/`.
+- Repository Pages is enabled for GitHub Actions and the eval catalog is deployed at `https://freedivingin.github.io/Affordance-Design/`.
+- The initial deployed prototype blank-screen defect was reproduced by the touch/mobile Playwright benchmark and traced to missing Tamagui v5 animation configuration.
+- Added `@tamagui/config/v5-rn` animations to the universal Tamagui config; the frozen interaction model did not change.
+- Local exported-Web interaction benchmark now passes for pointer and touch/mobile contexts.
+- Pages now runs a post-deploy Playwright smoke gate; both `desktop-pointer` and `touch-mobile` loaded the public URL, performed Assign, and rendered committed feedback successfully.
 
 ## Current State
 
-The first representative interaction is frozen independently of Tamagui and implemented as a block-like universal prototype.
+The first representative interaction remains frozen independently of Tamagui and is implemented as a block-like universal prototype.
 
-Runtime mapping currently preserves one semantic state model while allowing presentation adaptation. Review already overturned one implementation assumption — viewport-width adaptation — in favor of input-capability adaptation without changing the frozen interaction model.
+The public prototype is no longer accepted based on build/deployment status alone. GitHub Pages deployment is followed by real Chromium operation against the public URL in both pointer and touch/mobile contexts.
 
-Milestone 6 browser-operation testing is still being closed. Pointer Web operation has produced positive evidence; touch/mobile browser emulation remains the unresolved runtime-operation area and must not be reported as complete native interaction validation.
+The previously observed touch/mobile blank page is closed. Its cause was runtime configuration: `@tamagui/config/v5` contains no animation driver, while the adapted Sheet path requires one. Adding the v5 React Native animation preset fixed the render without changing task semantics, scope, state transitions, or recovery.
 
-Milestone 7 repository publishing is operational. The Pages build successfully installs dependencies, exports the real Expo Web runtime with the repository subpath, assembles the eval site, uploads the Pages artifact, and deploys it. Feature-branch deployment uses the separate `eval-pages-preview` GitHub environment so preview work is not blocked by protection rules on the default `github-pages` environment; `main` continues to target `github-pages`.
+Milestone 6 is complete for browser pointer/touch semantics. Native simulator/physical-device operation remains outstanding before claiming native Mobile runtime validation.
 
 ## Open Issues
 
 - Actual native Sheet interaction still needs simulator or physical-device operation evidence.
-- Touch/mobile browser benchmark needs final closure after separating pointer and touch test projects.
-- External HTTP rendering of each Pages URL has not been independently fetched from the current execution environment; GitHub's Pages deployment itself reports success and the site URL.
+- Keyboard/focus behavior is not fully reviewed beyond the tested pointer Escape dismissal.
+- Long-list touch gesture quality and production accessibility remain unverified.
 - No evidence yet justifies a custom design system, component registry, additional component library, or abstraction layer.
-- A successful static export still does not prove focus, gesture, or interaction quality.
 
 ## Decisions
 
@@ -59,12 +61,12 @@ Milestone 7 repository publishing is operational. The Pages build successfully i
 - Do not browse or enumerate Tamagui components during design divergence.
 - Component names are implementation vocabulary, not interaction-design vocabulary.
 - The default artifact is a low-visual-fidelity, high-behavior-fidelity block prototype.
-- Web and Mobile may use different presentations after semantics are fixed; the task/scope/state/recovery contract should remain consistent unless context justifies a different model.
-- Prefer composition of simpler Tamagui primitives over changing a validated interaction model merely to fit a stock component.
-- Do not build a generic component showcase as the first prototype checkpoint.
-- Eval Pages must publish the real generated runtime output, not a separately hand-authored mock that can drift from the tested source.
+- Web and Mobile may use different presentations after semantics are fixed; task/scope/state/recovery semantics remain shared unless context justifies a different model.
+- Prefer composition/configuration changes over changing a validated interaction model merely to fit runtime constraints.
+- Eval Pages publish the real generated runtime output, not a separately hand-authored mock.
 - Machine-readable eval assertions live beside human-rendered review pages; generated runtime bundles remain build artifacts rather than project truth.
-- Feature-branch Pages deployments may use `eval-pages-preview`; `main` uses the default `github-pages` environment.
+- Feature-branch Pages deployments use `eval-pages-preview`; `main` uses `github-pages`.
+- Static export or successful Pages deployment alone is insufficient verification. A deployed runnable eval must pass browser operation with browser errors treated as failures.
 
 ## Constraints
 
@@ -73,15 +75,15 @@ Milestone 7 repository publishing is operational. The Pages build successfully i
 - Do not add another UI library without evidence meeting the re-evaluation conditions in `engineering-contract.md`.
 - Keep current Tamagui API/version details in implementation/reference material, not product behavior documents.
 - A successful render is not a successful prototype; key paths must be operated and reviewed.
-- The first runnable prototype must start from an interaction specification that was produced without Tamagui component vocabulary.
-- Do not treat GitHub Pages configuration or deployment-environment protection failures as runtime interaction failures.
+- The first runnable prototype must start from an interaction specification produced without Tamagui component vocabulary.
+- Runtime failures must first be diagnosed at the implementation/configuration boundary; do not redesign upstream semantics merely to fit a stock component.
 
 ## Hypotheses
 
-- Tamagui's unstyled/styled primitives plus `Adapt` will be sufficient for the first set of structural prototypes without a custom design system.
-- Loading Tamagui knowledge only after structural choice will reduce component-led convergence compared with component-first prompting.
-- A deliberately neutral visual grammar will make structural defects easier to see and easier for Review to overturn.
-- Renderable eval pages will make structural review easier to compare across cases than CI logs or Markdown-only outputs.
+- Tamagui's primitives plus `Adapt` remain sufficient for the first structural prototypes without a custom design system.
+- Loading Tamagui knowledge only after structural choice reduces component-led convergence compared with component-first prompting.
+- A deliberately neutral visual grammar makes structural defects easier to see and easier for Review to overturn.
+- Renderable eval pages plus post-deploy operation will catch failures that Markdown review, compilation, and static export cannot.
 
 ## Deferred
 
@@ -95,40 +97,37 @@ Milestone 7 repository publishing is operational. The Pages build successfully i
 
 ## Next
 
-1. Open and manually review the deployed catalog and case 001 prototype from an external browser.
-2. Finish the touch/mobile browser-operation benchmark and update `prototypes/assignment/structural-review.md` with observed evidence.
-3. Operate at least one native Mobile target before closing Milestone 6.
-4. After the first case is externally reviewed, add the next eval only when it exercises a distinct Affordance rule rather than growing a showcase catalog.
+1. Manually review Case 001 as a design artifact now that automated deployed-browser operation passes.
+2. Operate at least one native Mobile target before claiming native runtime completion.
+3. Add the next eval only when it exercises a distinct Affordance rule rather than growing a component/showcase catalog.
+4. Use the first two or three distinct cases to evaluate whether the current Skill improves structural decisions versus without-Skill baselines.
 
 ## Verification
 
-Confirmed runtime evidence:
+Confirmed evidence:
 
 ```text
 platform-independent assignment model: PASS (4/4)
 TypeScript: PASS
 Web Expo export: PASS
 iOS Expo export: PASS
+local desktop-pointer interaction: PASS
+local touch-mobile interaction: PASS
 Pages nested Expo build: PASS
 Pages artifact upload: PASS
 Pages deployment: PASS
-GitHub-reported site URL: https://freedivingin.github.io/Affordance-Design/
+deployed desktop-pointer operation: PASS
+deployed touch-mobile operation: PASS
+public prototype: https://freedivingin.github.io/Affordance-Design/cases/001-bulk-assignment/prototype/
 ```
 
-The runtime milestone is complete when:
+The runtime milestone is fully complete when:
 
 - a runnable Tamagui prototype works on Web and at least one native Mobile target;
 - the design decision can be reconstructed without referencing component availability;
 - the same semantic interaction is preserved across platform presentation changes where expected;
 - the prototype remains intentionally block-like rather than visually polished;
-- Review can identify and overturn a structural mistake independently of whether the code runs;
+- Review can identify and overturn implementation/structural mistakes independently of whether the code compiles;
 - no second UI/runtime system was introduced without documented evidence.
 
-The eval-publishing checkpoint is implementation-complete when:
-
-- repository Pages is enabled for GitHub Actions;
-- the Pages workflow builds and deploys successfully;
-- GitHub returns a Pages site URL;
-- the published artifact contains the catalog, case 001 review page, actual Expo-generated prototype, and machine-readable `case.json`.
-
-External human review of those URLs remains a separate acceptance step rather than being inferred from deployment success.
+The eval-publishing checkpoint is complete for Case 001: the public artifact is deployed and automatically operated after deployment in both desktop-pointer and touch-mobile browser contexts.
