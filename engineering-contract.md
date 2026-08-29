@@ -48,6 +48,42 @@ During this phase:
 
 After one model is selected, implementation may adapt its presentation to the platform as long as the interaction semantics remain intact.
 
+## Eval case data boundary
+
+Reviewer context and product runtime are separate artifacts.
+
+Every eval case must persist its requirement context outside the prototype, including:
+
+```yaml
+requirement_goal:
+background:
+current_state:
+optimization_direction: feature_creation | feature_upgrade | feature_optimization
+```
+
+Reviewer-only material such as expected behavior, forbidden outcomes, rationale, source evidence, benchmark status, and implementation notes belongs in `evals/` metadata/pages or review documents.
+
+Do not encode reviewer-only information into the product runtime merely because it makes the prototype easier to understand in isolation.
+
+## Prototype surface purity
+
+The prototype runtime must render only product UI that the represented end user would actually see.
+
+Do not render development or evaluation scaffolding, including:
+
+- prototype/eval/demo/test labels;
+- interaction instructions for reviewers;
+- state-machine descriptions;
+- design rationale or expected-behavior text;
+- platform labels or benchmark status;
+- prototype-only headings, legends, annotations, or helper copy.
+
+A visible heading, helper message, confirmation, status, error, empty state, or recovery action is permitted only when it is part of the represented product experience.
+
+Test IDs, automation selectors, source comments, and other non-rendered instrumentation may exist in code when needed for verification, but they must not produce user-visible prototype content or alter product behavior.
+
+The runtime must not require prototype-only visible instructions to make the intended interaction discoverable. If it does, treat that as evidence that the interaction design itself may be insufficient.
+
 ## Prototype fidelity
 
 The prototype is a structural validation artifact.
