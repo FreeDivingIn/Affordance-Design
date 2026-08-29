@@ -9,6 +9,7 @@
     "ios": "expo start --ios -c",
     "android": "expo start --android -c",
     "test:model": "node --experimental-strip-types --test assignment-model.test.ts",
+    "test:web": "playwright test",
     "typecheck": "tsc --noEmit",
     "export:web": "expo export --platform web --output-dir dist-web",
     "export:ios": "expo export --platform ios --output-dir dist-ios"
@@ -24,6 +25,7 @@
     "tamagui": "^2.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "1.62.1",
     "@types/react": "~19.2.2",
     "typescript": "~6.0.3"
   },
