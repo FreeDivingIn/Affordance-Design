@@ -60,6 +60,13 @@ Make Affordance Design produce runnable, block-like structural prototypes for We
   - baseline failures concentrated where the Skill carries explicit guards (confirmation creep under platform pressure in 001; taxonomy-first vs problem-state-first structure in 004);
   - cases 002/003 scored perfect rubrics from model prior, motivating rawer briefs and multi-run follow-ups;
   - evidence limits (n=1 per case, same model family, spec-level only) are recorded in the comparison document.
+- The second comparison run with raw briefs is complete (`evals/comparisons/with-vs-without-skill-002.md`, run 002, 2026-08-30):
+  - raw briefs authored by independent brief-author agents from `requirement`+`input` only, verified by an independent leak-check agent (3 of 4 briefs revised once for resolution-leaking sentences);
+  - n=3 baselines per case (12 total), each blind-scored by a separate judge: 156 PASS / 4 PARTIAL / 2 FAIL across 162 interaction assertions;
+  - run-001's 001 F4 failure did not recur (single-run event, not a stable prior failure mode); case 002's suggested-default + separate-commit divergence replicated 3/3 and is now the suite's most stable with/without-Skill structural difference;
+  - case 003's asymmetry was independently derived by 3/3 baselines — the situation is self-describing even raw, so the case has low discriminating power at spec level regardless of brief format;
+  - case 004 baselines converged toward the Skill's intent-first direction; leak-free brief authorship is in direct tension with "preserve X" constraints (004 E1/F2 scores annotated as method artifact);
+  - evidence limits (n=3, same model family at three points, coordinator prompt framing, spec-level only) are recorded in the comparison document.
 
 ## Current State
 
@@ -145,13 +152,13 @@ All ten milestones are complete. The first with-Skill vs without-Skill compariso
 
 ## Next
 
-Follow-up candidates from comparison run 001 (each enters its own alignment cycle when prioritized):
+Follow-up candidates from comparison runs 001 and 002 (each enters its own alignment cycle when prioritized):
 
-1. Multi-run baselines (n≥3 per case) and at least one different model family, to bound the n=1 and same-family confounds.
-2. A second comparison run with rawer briefs (no known/unresolved decomposition) to measure the Skill's decomposition contribution.
-3. Case 003 fixture hardening: the current brief states the resolution inside `current_state`, making it nearly self-answering.
-4. Case 004 rubric separation: split interaction assertions from process assertions; make F1 self-contained.
-5. Runnable baseline prototypes for behavioral comparison, if a second spec-level run justifies the cost.
+1. At least one different model family for baselines and judges — the largest remaining confound in both runs (n=3 same-family baselines now done).
+2. Case 003 fixture hardening: the situation is self-describing even in raw-brief form (3/3 run-002 baselines derived the asymmetry); the case has low discriminating power at spec level regardless of brief format.
+3. Case 004 fixture hardening: split the brief into leak-checkable world description vs explicitly declared constraints ("preserve X" assertions are resolution-leaking by nature, per run-002 finding 4); make F1 self-contained.
+4. A suite addition targeting derivation-from-opacity: a case whose structural asymmetry is not observable in the situation description, so the raw-brief method can actually stress the Skill's decomposition step.
+5. Runnable baseline prototypes for behavioral comparison, if a third spec-level run adds new signal.
 
 ## Verification
 
