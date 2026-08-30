@@ -1,0 +1,70 @@
+{
+  "id": "004-media-template-composer",
+  "title": "Media + Template Composer",
+  "category": "complex-mobile-composer-and-content-acquisition",
+  "requirement": {
+    "requirement_goal": "Increase the rate at which users publish content with visual media attached while improving the workflow for discovering, configuring, and inserting templates from inside an existing mobile content composer.",
+    "background": "The mobile composer already supports long-form text editing plus several ways to add visual content. Users can access device photos, video, domain-specific material, and a heterogeneous catalog of visual templates from a lower acquisition panel while keeping the draft editor above. The product wants more published posts to contain useful visual content and wants templates to be easier to use, without removing the existing media-source capabilities.",
+    "current_state": "The composer contains a content-type header, draft state, title and body editing, section/topic metadata entry, emoji/mention/add/settings utilities, and a large lower acquisition panel with four peer tabs: Album, Video, Game assets, and All templates. In Album, a limited-photo-permission message and Settings CTA sit above a camera tile and selectable media grid. In All templates, the same panel becomes a heterogeneous template catalog containing generic entries such as All templates and Text image alongside entertainment/game-like template generators. Switching the lower source leaves the draft editor visible. The current-state reconstruction must preserve this complete capability set and interaction density rather than simplifying the problem by deleting sources or template families.",
+    "optimization_direction": "feature_optimization"
+  },
+  "input": {
+    "person": "A mobile user composing a text-first post who may add direct media or create a visual asset from a template before publishing.",
+    "current_situation": "The user is actively drafting title/body content while the lower visual-content acquisition panel is available.",
+    "primary_task": "Finish a publishable post and attach useful visual content when appropriate.",
+    "desired_outcome": "Adding a relevant image or template-generated visual feels like a natural continuation of composing rather than a separate tool-browsing task.",
+    "business_goal": [
+      "Increase image-attached publishing rate.",
+      "Increase successful template usage without degrading direct album/video/material insertion."
+    ],
+    "known": [
+      "The draft editor remains the primary task context while the visual-content panel is open.",
+      "Album, Video, Game assets, and All templates are existing capability families and must remain represented in the baseline.",
+      "Album currently includes photo-access friction, camera acquisition, and selectable device media.",
+      "All templates currently mixes generic functional entries with heterogeneous themed generators.",
+      "The two provided screenshots directly confirm Album and All templates states but not every downstream action."
+    ],
+    "open_evidence": [
+      "Exact publish flow and post-insertion behavior.",
+      "Exact downstream structure of Video and Game assets.",
+      "Exact template configuration and commit semantics.",
+      "Whether draft title/body/topic context is automatically consumed by templates.",
+      "Exact semantics of the content-type selector and Draft control."
+    ]
+  },
+  "expected": [
+    "Preserve the complete current-state capability set in the baseline before proposing optimization.",
+    "Keep draft/title/body/metadata state observable while users move among visual-content sources.",
+    "Treat direct media acquisition and template generation as different user intents even though both can produce visual attachments.",
+    "Use existing draft context when it legitimately reduces repeated template input, while not silently inventing context the product does not have.",
+    "Make template discovery and completion easier to evaluate through an operable flow rather than static template-card prominence alone.",
+    "Protect direct album/video/material paths from being degraded solely to promote templates.",
+    "Keep source-confirmed facts separate from inferred reconstruction behavior.",
+    "Produce a later optimized prototype that can be compared against the frozen current-state reconstruction without visual polish masking structural differences."
+  ],
+  "forbidden": [
+    "using the real application name or distinctive branded template names",
+    "removing Album, Video, Game assets, or All templates from the baseline to make the problem easier",
+    "reducing the current lower panel to a generic single picker in the baseline",
+    "treating more template visual prominence as sufficient proof of better template usage",
+    "moving users out of the composer without a task-state reason",
+    "re-asking draft context that the template flow can already obtain from the current editor state",
+    "replacing user-authored draft text while generating visual content",
+    "presenting Derived reconstruction assumptions as screenshot-confirmed facts",
+    "reviewer or prototype explanation rendered inside the end-user product surface"
+  ],
+  "source": {
+    "observations": "./source-observations.md",
+    "baseline_spec": "../../../prototypes/media-template-composer/baseline-interaction-spec.md",
+    "baseline_review": "../../../prototypes/media-template-composer/baseline-review.md",
+    "baseline_runtime": "../../../prototypes/media-template-composer/baseline-runtime/",
+    "optimized_interaction_spec": "../../../prototypes/media-template-composer/optimized-interaction-spec.md",
+    "optimized_review": "../../../prototypes/media-template-composer/optimized-review.md",
+    "optimized_runtime": "../../../prototypes/media-template-composer/optimized-runtime/"
+  },
+  "render": {
+    "case_page": "./",
+    "baseline": "./baseline/",
+    "prototype": "./prototype/"
+  }
+}

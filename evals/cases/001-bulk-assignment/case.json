@@ -1,0 +1,48 @@
+{
+  "id": "001-bulk-assignment",
+  "title": "Bulk Assignment",
+  "category": "resolved-context-and-command-contract",
+  "requirement": {
+    "requirement_goal": "Allow a field-operations coordinator to reassign multiple already-selected work orders to one technician quickly, while keeping the result clear and recoverable.",
+    "background": "Field-operations coordinators triage a shared work queue throughout the day. They often select several work orders that need the same technician and then perform a batch assignment while remaining in the queue context.",
+    "current_state": "The work queue already supports multi-selection and an Assign action, but the current assignment flow treats invocation as the start of a new generic assignment process: it re-establishes target context and adds decision/confirmation steps even though the selected work orders and the Assign intent are already known.",
+    "optimization_direction": "feature_optimization"
+  },
+  "input": {
+    "context": "A field-operations coordinator is triaging a work queue.",
+    "known": [
+      "Several work orders are already selected.",
+      "The user explicitly invoked Assign."
+    ],
+    "unresolved": [
+      "Which technician should receive the selected work orders?"
+    ]
+  },
+  "expected": [
+    "Do not ask the user to select the target work orders again.",
+    "Do not broaden Assign into an unrelated action catalog.",
+    "Resolve only the remaining technician choice.",
+    "Commit technician choice without a redundant confirmation stage.",
+    "Show the resulting assignment and an Undo recovery path.",
+    "Preserve the target selection when the chooser is dismissed.",
+    "Allow presentation to differ by input context without changing task semantics."
+  ],
+  "forbidden": [
+    "component-first redesign",
+    "reopened target selection",
+    "capability catalog after concrete command",
+    "unnecessary confirmation",
+    "platform-specific semantic fork",
+    "reviewer or prototype explanation rendered inside the product prototype"
+  ],
+  "source": {
+    "interaction_spec": "../../../prototypes/assignment/interaction-spec.md",
+    "runtime_mapping": "../../../prototypes/assignment/runtime-mapping.md",
+    "structural_review": "../../../prototypes/assignment/structural-review.md",
+    "runtime": "../../../prototypes/assignment/runtime/"
+  },
+  "render": {
+    "case_page": "./",
+    "prototype": "./prototype/"
+  }
+}

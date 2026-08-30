@@ -1,0 +1,51 @@
+{
+  "id": "003-move-access-paths",
+  "title": "Move Access Paths",
+  "category": "multiple-access-paths-and-resolved-context",
+  "requirement": {
+    "requirement_goal": "Let a logistics dispatcher move a shipment either through the explicit Move action or by dragging it directly onto a visible destination depot, without making the direct-manipulation path repeat destination selection that the drop already expressed.",
+    "background": "Dispatchers work in a logistics workspace where active shipments and destination depots are visible together. A shipment can be moved from its explicit Move action, and pointer users can also drag it directly onto a depot. The product can preserve the previous depot for Undo.",
+    "current_state": "Both access paths exist, but the team wants them to open the same destination picker for consistency. The generic Move command genuinely needs that picker because the destination is unresolved, while a valid drag onto a specific depot has already supplied the destination through the drop target.",
+    "optimization_direction": "feature_optimization"
+  },
+  "input": {
+    "context": "A dispatcher is moving an active shipment between depots in a workspace where shipments and depots are simultaneously visible.",
+    "known": [
+      "The shipment is known before either Move path begins.",
+      "The explicit Move command does not itself specify a destination.",
+      "A valid drag drop onto a depot specifies that depot as the destination.",
+      "The previous depot can be restored with Undo."
+    ],
+    "unresolved": [
+      "Command path: which depot should receive the shipment?",
+      "Drag path after a valid drop: no destination question remains."
+    ]
+  },
+  "expected": [
+    "Keep the explicit Move command and drag-to-depot as one conceptual move action.",
+    "Ask for destination on the generic Move path because it is unresolved.",
+    "Do not ask for destination after a valid drag onto a specific depot.",
+    "Produce the same shipment/depot result when both paths resolve to the same destination.",
+    "Use the same recovery semantics across access paths.",
+    "Leave shipment state unchanged after an invalid drop.",
+    "Allow touch/mobile to use the explicit Move path without inventing an identical drag presentation solely for consistency."
+  ],
+  "forbidden": [
+    "destination picker after a valid drop target already supplied destination",
+    "reopened shipment selection",
+    "different conceptual move outcomes by access path",
+    "forced identical intermediate steps for consistency",
+    "redundant confirmation with no new uncertainty",
+    "reviewer or prototype explanation rendered inside the product prototype"
+  ],
+  "source": {
+    "interaction_spec": "../../../prototypes/shipment-move/interaction-spec.md",
+    "runtime_mapping": "../../../prototypes/shipment-move/runtime-mapping.md",
+    "structural_review": "../../../prototypes/shipment-move/structural-review.md",
+    "runtime": "../../../prototypes/shipment-move/runtime/"
+  },
+  "render": {
+    "case_page": "./",
+    "prototype": "./prototype/"
+  }
+}

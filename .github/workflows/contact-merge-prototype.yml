@@ -1,0 +1,48 @@
+name: Contact merge prototype
+
+on:
+  push:
+    branches:
+      - skill/init-affordance-design
+    paths:
+      - 'prototypes/contact-merge/runtime/**'
+      - '.github/workflows/contact-merge-prototype.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: prototypes/contact-merge/runtime
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: prototypes/contact-merge/runtime/package.json
+
+      - name: Test platform-independent interaction model
+        run: npm run test:model
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Export Web bundle
+        run: npm run export:web
+
+      - name: Export iOS bundle
+        run: npm run export:ios
+
+      - name: Install Chromium for interaction benchmark
+        run: npx playwright install --with-deps chromium
+
+      - name: Operate pointer and touch Web flows
+        run: npm run test:web

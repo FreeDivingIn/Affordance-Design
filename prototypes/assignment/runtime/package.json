@@ -1,0 +1,35 @@
+{
+  "name": "affordance-assignment-prototype",
+  "version": "0.0.1",
+  "private": true,
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start -c",
+    "web": "expo start --web -c",
+    "ios": "expo start --ios -c",
+    "android": "expo start --android -c",
+    "test:model": "node --experimental-strip-types --test assignment-model.test.ts",
+    "test:web": "playwright test",
+    "typecheck": "tsc --noEmit",
+    "export:web": "expo export --platform web --output-dir dist-web",
+    "export:ios": "expo export --platform ios --output-dir dist-ios"
+  },
+  "dependencies": {
+    "@tamagui/config": "^2.0.0",
+    "expo": "~57.0.9",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-native": "0.86.2",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-web": "~0.21.0",
+    "tamagui": "^2.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1",
+    "@types/react": "~19.2.2",
+    "typescript": "~6.0.3"
+  },
+  "engines": {
+    "node": ">=22.13"
+  }
+}

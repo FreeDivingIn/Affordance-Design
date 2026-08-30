@@ -1,0 +1,48 @@
+name: Media template composer optimized
+
+on:
+  push:
+    branches:
+      - skill/init-affordance-design
+    paths:
+      - 'prototypes/media-template-composer/optimized-runtime/**'
+      - '.github/workflows/media-template-composer-optimized.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: prototypes/media-template-composer/optimized-runtime
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: prototypes/media-template-composer/optimized-runtime/package.json
+
+      - name: Test optimized structural model
+        run: npm run test:model
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Export Web bundle
+        run: npm run export:web
+
+      - name: Export iOS bundle
+        run: npm run export:ios
+
+      - name: Install Chromium for interaction benchmark
+        run: npx playwright install --with-deps chromium
+
+      - name: Operate optimized mobile flows
+        run: npm run test:web

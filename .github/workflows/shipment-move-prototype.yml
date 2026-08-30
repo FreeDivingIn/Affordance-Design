@@ -1,0 +1,48 @@
+name: Shipment move prototype
+
+on:
+  push:
+    branches:
+      - skill/init-affordance-design
+    paths:
+      - 'prototypes/shipment-move/runtime/**'
+      - '.github/workflows/shipment-move-prototype.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: prototypes/shipment-move/runtime
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: prototypes/shipment-move/runtime/package.json
+
+      - name: Test platform-independent interaction model
+        run: npm run test:model
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Export Web bundle
+        run: npm run export:web
+
+      - name: Export iOS bundle
+        run: npm run export:ios
+
+      - name: Install Chromium for interaction benchmark
+        run: npx playwright install --with-deps chromium
+
+      - name: Operate pointer and touch Web flows
+        run: npm run test:web

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Affordance Design Evals</title>
+  <style>
+    :root { color-scheme: light dark; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 32px 20px; background: Canvas; color: CanvasText; }
+    main { max-width: 900px; margin: 0 auto; }
+    h1 { margin: 0 0 8px; font-size: 28px; }
+    p { line-height: 1.55; }
+    .muted { opacity: .68; }
+    .case { border: 1px solid color-mix(in srgb, CanvasText 22%, transparent); padding: 18px; margin-top: 28px; }
+    .case h2 { margin: 0 0 8px; font-size: 20px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+    .tag { border: 1px solid color-mix(in srgb, CanvasText 18%, transparent); padding: 4px 8px; font-size: 13px; }
+    .error { border: 1px solid currentColor; padding: 12px; margin-top: 24px; }
+    a { color: LinkText; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Affordance Design Evals</h1>
+    <p class="muted">Each case contains a complete product brief, observable structural expectations, and a runnable product-only prototype built from the real runtime source.</p>
+    <div id="cases"></div>
+  </main>
+
+  <script>
+    const directionLabels = {
+      feature_creation: 'Feature creation',
+      feature_upgrade: 'Feature upgrade',
+      feature_optimization: 'Feature optimization',
+    }
+
+    async function renderCase(caseId) {
+      const response = await fetch(`./cases/${caseId}/case.json`, { cache: 'no-store' })
+      if (!response.ok) throw new Error(`${caseId}: case.json request failed: ${response.status}`)
+      const data = await response.json()
+
+      const section = document.createElement('section')
+      section.className = 'case'
+
+      const title = document.createElement('h2')
+      title.textContent = `${data.id} — ${data.title}`
+      section.appendChild(title)
+
+      const goal = document.createElement('p')
+      goal.textContent = data.requirement.requirement_goal
+      section.appendChild(goal)
+
+      const tags = document.createElement('div')
+      tags.className = 'tags'
+      const direction = document.createElement('span')
+      direction.className = 'tag'
+      direction.textContent = directionLabels[data.requirement.optimization_direction] || data.requirement.optimization_direction
+      tags.appendChild(direction)
+      section.appendChild(tags)
+
+      const link = document.createElement('a')
+      link.href = `./cases/${caseId}/`
+      link.textContent = 'Open full requirement and runnable prototype →'
+      section.appendChild(link)
+
+      document.querySelector('#cases').appendChild(section)
+    }
+
+    async function renderCatalog() {
+      const manifestResponse = await fetch('./cases.json', { cache: 'no-store' })
+      if (!manifestResponse.ok) throw new Error(`cases.json request failed: ${manifestResponse.status}`)
+      const manifest = await manifestResponse.json()
+      await Promise.all(manifest.cases.map(renderCase))
+    }
+
+    renderCatalog().catch((error) => {
+      const failure = document.createElement('div')
+      failure.className = 'error'
+      failure.textContent = `Unable to load eval catalog: ${error.message}`
+      document.querySelector('#cases').appendChild(failure)
+    })
+  </script>
+</body>
+</html>

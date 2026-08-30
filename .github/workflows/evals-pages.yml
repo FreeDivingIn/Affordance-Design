@@ -1,0 +1,219 @@
+name: Affordance evals Pages
+
+on:
+  push:
+    branches:
+      - main
+      - skill/init-affordance-design
+    paths:
+      - 'evals/**'
+      - 'prototypes/assignment/runtime/**'
+      - 'prototypes/contact-merge/runtime/**'
+      - 'prototypes/shipment-move/runtime/**'
+      - 'prototypes/media-template-composer/baseline-runtime/**'
+      - 'prototypes/media-template-composer/optimized-runtime/**'
+      - '.github/workflows/evals-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            prototypes/assignment/runtime/package.json
+            prototypes/contact-merge/runtime/package.json
+            prototypes/shipment-move/runtime/package.json
+            prototypes/media-template-composer/baseline-runtime/package.json
+            prototypes/media-template-composer/optimized-runtime/package.json
+
+      - name: Validate eval requirement briefs and build manifest
+        run: node evals/validate-cases.mjs --manifest _site/cases.json
+
+      - name: Install case 001 prototype dependencies
+        working-directory: prototypes/assignment/runtime
+        run: npm install --no-audit --no-fund
+
+      - name: Build case 001 prototype for Pages subpath
+        working-directory: prototypes/assignment/runtime
+        env:
+          EXPO_BASE_URL: /Affordance-Design/cases/001-bulk-assignment/prototype
+        run: npm run export:web
+
+      - name: Install case 002 prototype dependencies
+        working-directory: prototypes/contact-merge/runtime
+        run: npm install --no-audit --no-fund
+
+      - name: Build case 002 prototype for Pages subpath
+        working-directory: prototypes/contact-merge/runtime
+        env:
+          EXPO_BASE_URL: /Affordance-Design/cases/002-merge-command-contract/prototype
+        run: npm run export:web
+
+      - name: Install case 003 prototype dependencies
+        working-directory: prototypes/shipment-move/runtime
+        run: npm install --no-audit --no-fund
+
+      - name: Build case 003 prototype for Pages subpath
+        working-directory: prototypes/shipment-move/runtime
+        env:
+          EXPO_BASE_URL: /Affordance-Design/cases/003-move-access-paths/prototype
+        run: npm run export:web
+
+      - name: Install case 004 baseline dependencies
+        working-directory: prototypes/media-template-composer/baseline-runtime
+        run: npm install --no-audit --no-fund
+
+      - name: Build case 004 current-state baseline for Pages subpath
+        working-directory: prototypes/media-template-composer/baseline-runtime
+        env:
+          EXPO_BASE_URL: /Affordance-Design/cases/004-media-template-composer/baseline
+        run: npm run export:web
+
+      - name: Install case 004 optimized dependencies
+        working-directory: prototypes/media-template-composer/optimized-runtime
+        run: npm install --no-audit --no-fund
+
+      - name: Build case 004 Skill output for Pages subpath
+        working-directory: prototypes/media-template-composer/optimized-runtime
+        env:
+          EXPO_BASE_URL: /Affordance-Design/cases/004-media-template-composer/prototype
+        run: npm run export:web
+
+      - name: Assemble eval site
+        run: |
+          cp evals/index.html _site/index.html
+          for case_dir in evals/cases/*; do
+            [ -d "$case_dir" ] || continue
+            case_id="$(basename "$case_dir")"
+            mkdir -p "_site/cases/$case_id"
+            cp "$case_dir/index.html" "_site/cases/$case_id/index.html"
+            cp "$case_dir/case.json" "_site/cases/$case_id/case.json"
+            if [ -f "$case_dir/source-observations.md" ]; then
+              cp "$case_dir/source-observations.md" "_site/cases/$case_id/source-observations.md"
+            fi
+            if [ -f "$case_dir/comparison.md" ]; then
+              cp "$case_dir/comparison.md" "_site/cases/$case_id/comparison.md"
+            fi
+          done
+          mkdir -p _site/cases/001-bulk-assignment/prototype
+          cp -R prototypes/assignment/runtime/dist-web/. _site/cases/001-bulk-assignment/prototype/
+          mkdir -p _site/cases/002-merge-command-contract/prototype
+          cp -R prototypes/contact-merge/runtime/dist-web/. _site/cases/002-merge-command-contract/prototype/
+          mkdir -p _site/cases/003-move-access-paths/prototype
+          cp -R prototypes/shipment-move/runtime/dist-web/. _site/cases/003-move-access-paths/prototype/
+          mkdir -p _site/cases/004-media-template-composer/baseline
+          cp -R prototypes/media-template-composer/baseline-runtime/dist-web/. _site/cases/004-media-template-composer/baseline/
+          mkdir -p _site/cases/004-media-template-composer/prototype
+          cp -R prototypes/media-template-composer/optimized-runtime/dist-web/. _site/cases/004-media-template-composer/prototype/
+          touch _site/.nojekyll
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    environment:
+      name: ${{ github.ref == 'refs/heads/main' && 'github-pages' || 'eval-pages-preview' }}
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    needs: deploy
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            prototypes/assignment/runtime/package.json
+            prototypes/contact-merge/runtime/package.json
+            prototypes/shipment-move/runtime/package.json
+            prototypes/media-template-composer/baseline-runtime/package.json
+            prototypes/media-template-composer/optimized-runtime/package.json
+
+      - name: Install case 001 prototype dependencies
+        working-directory: prototypes/assignment/runtime
+        run: npm install --no-audit --no-fund
+
+      - name: Install case 002 prototype dependencies
+        working-directory: prototypes/contact-merge/runtime
+        run: npm install --no-audit --no-fund
+
+      - name: Install case 003 prototype dependencies
+        working-directory: prototypes/shipment-move/runtime
+        run: npm install --no-audit --no-fund
+
+      - name: Install case 004 baseline dependencies
+        working-directory: prototypes/media-template-composer/baseline-runtime
+        run: npm install --no-audit --no-fund
+
+      - name: Install case 004 optimized dependencies
+        working-directory: prototypes/media-template-composer/optimized-runtime
+        run: npm install --no-audit --no-fund
+
+      - name: Install Chromium
+        working-directory: prototypes/assignment/runtime
+        run: npx playwright install --with-deps chromium
+
+      - name: Verify deployed case 001 requirement and prototype
+        working-directory: prototypes/assignment/runtime
+        env:
+          PROTOTYPE_URL: https://freedivingin.github.io/Affordance-Design/cases/001-bulk-assignment/prototype/
+        run: node e2e/pages-smoke.mjs
+
+      - name: Verify deployed case 002 requirement and prototype
+        working-directory: prototypes/contact-merge/runtime
+        env:
+          PROTOTYPE_URL: https://freedivingin.github.io/Affordance-Design/cases/002-merge-command-contract/prototype/
+        run: node e2e/pages-smoke.mjs
+
+      - name: Verify deployed case 003 requirement and prototype
+        working-directory: prototypes/shipment-move/runtime
+        env:
+          PROTOTYPE_URL: https://freedivingin.github.io/Affordance-Design/cases/003-move-access-paths/prototype/
+        run: node e2e/pages-smoke.mjs
+
+      - name: Verify deployed case 004 requirement and current-state baseline
+        working-directory: prototypes/media-template-composer/baseline-runtime
+        env:
+          BASELINE_URL: https://freedivingin.github.io/Affordance-Design/cases/004-media-template-composer/baseline/
+        run: node e2e/pages-smoke.mjs
+
+      - name: Verify deployed case 004 Skill output
+        working-directory: prototypes/media-template-composer/optimized-runtime
+        env:
+          PROTOTYPE_URL: https://freedivingin.github.io/Affordance-Design/cases/004-media-template-composer/prototype/
+        run: node e2e/pages-smoke.mjs

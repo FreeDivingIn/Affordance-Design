@@ -1,0 +1,50 @@
+{
+  "id": "002-merge-command-contract",
+  "title": "Merge Command Contract",
+  "category": "command-affordance-contract",
+  "requirement": {
+    "requirement_goal": "Let a contact-management user merge two already-selected duplicate contacts without being diverted into unrelated contact-management capabilities, while keeping the merge result clear and recoverable.",
+    "background": "Users clean duplicate records from a contact list by selecting the two records they believe represent the same person and invoking an explicit Merge command. The merge can preserve a pre-merge snapshot for recovery, and the product needs one of the selected records to remain the primary identity after the merge.",
+    "current_state": "The contact list already supports selecting two contacts and invoking Merge, but the current interaction opens a broad menu containing Merge, Export, Add tags, Find duplicates, and AI cleanup. This turns a committed Merge command into a general capability catalog and forces the user back into a decision they already made.",
+    "optimization_direction": "feature_optimization"
+  },
+  "input": {
+    "context": "A user is cleaning duplicate records in a contact-management list.",
+    "known": [
+      "Exactly two contact records are already selected.",
+      "The user explicitly invoked Merge.",
+      "The product can preserve a pre-merge snapshot for Undo."
+    ],
+    "unresolved": [
+      "Which of the two selected contacts should remain the primary record?"
+    ]
+  },
+  "expected": [
+    "Keep the explicit Merge command semantically narrow after invocation.",
+    "Reuse the existing two-contact selection as the merge target.",
+    "Expose only merge-specific unresolved decisions after Merge.",
+    "Allow the user to choose either selected contact as the primary record.",
+    "Commit the merge after the primary record is chosen without a redundant generic confirmation stage.",
+    "Show the merged result and an Undo recovery path.",
+    "Preserve the original selection when the merge surface is dismissed.",
+    "Allow pointer and touch presentations to differ without changing merge semantics."
+  ],
+  "forbidden": [
+    "unrelated capability catalog after Merge",
+    "reopened contact selection",
+    "Export, Add tags, Find duplicates, or AI cleanup inside the Merge flow",
+    "redundant confirmation with no new uncertainty",
+    "platform-specific semantic fork",
+    "reviewer or prototype explanation rendered inside the product prototype"
+  ],
+  "source": {
+    "interaction_spec": "../../../prototypes/contact-merge/interaction-spec.md",
+    "runtime_mapping": "../../../prototypes/contact-merge/runtime-mapping.md",
+    "structural_review": "../../../prototypes/contact-merge/structural-review.md",
+    "runtime": "../../../prototypes/contact-merge/runtime/"
+  },
+  "render": {
+    "case_page": "./",
+    "prototype": "./prototype/"
+  }
+}
